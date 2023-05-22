@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,9 +13,13 @@ public class DamagingObject : MonoBehaviour
     protected Rigidbody2D rb;
 
     protected HealthManager health;
+    protected event Action OnDestroy;
 
     [SerializeField] protected int damage;
     [SerializeField] protected bool destroyOnHit;
+    [SerializeField] protected bool destroyOnCrossFire;
+    protected bool destroyed;
+
     [SerializeField] protected bool canKnockback;
     [SerializeField] protected float knockbackAmt;
     [SerializeField] protected List<string> targetTags;
@@ -59,7 +64,7 @@ public class DamagingObject : MonoBehaviour
             }
 
             // Destroy object if appropriate
-            if (destroyOnHit)
+            if (!destroyed && ValidHit(other))
                 DestroyObject();
         }
     }
@@ -69,15 +74,25 @@ public class DamagingObject : MonoBehaviour
         return targetTags.Count == 0 || targetTags.Contains(obj.tag);
     }
 
+    protected bool ValidHit(GameObject obj)
+    {
+        return destroyOnHit && (destroyOnCrossFire == (obj.layer == 8 || obj.layer == 10));
+    }
+
     protected void DestroyObject()
     {
+        destroyed = true; // Prevent simultaneous collision from causing multiple destroys
+
         cldr.enabled = false;
         rb.gravityScale = 0;
         rb.velocity = Vector2.zero;
 
         // Play collision animation
         if (anim == null)
+        {
+            OnDestroy?.Invoke();
             Destroy(gameObject);
+        }
         else
             anim.SetTrigger("OnDestroy");
     }
@@ -87,6 +102,7 @@ public class DamagingObject : MonoBehaviour
     /// </summary>
     private void DestroyObjectPostAnim()
     {
+        OnDestroy?.Invoke();
         Destroy(gameObject);
     }
 }

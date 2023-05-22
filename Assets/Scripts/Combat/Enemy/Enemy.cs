@@ -37,15 +37,10 @@ public class Enemy : MonoBehaviour
         rotator.eulerAngles = Vector3.forward * angle;
     }
 
-    protected GameObject Shoot(int projType, float projSpeed, float dRot = 0)
+    protected Projectile Shoot(int projType, float projSpeed, float dRot = 0)
     {
-        GameObject proj = Instantiate(projectiles[projType], shootPoint.position, shootPoint.rotation).gameObject;
-        proj.transform.localEulerAngles = new Vector3(0, 0, proj.transform.localEulerAngles.z + dRot);
-
-        proj.GetComponent<Projectile>().SetOrigin(transform);
-        proj.GetComponent<Rigidbody2D>().velocity = proj.transform.right * projSpeed;
-
+        Projectile proj = Instantiate(projectiles[projType], shootPoint.position, shootPoint.rotation).GetComponent<Projectile>();
+        proj.SetDefaults(transform, dRot, projSpeed);
         return proj;
     }
-
 }

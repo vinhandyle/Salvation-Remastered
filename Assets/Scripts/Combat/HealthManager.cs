@@ -11,6 +11,7 @@ public class HealthManager : MonoBehaviour
     private Animator anim;
     private SpriteRenderer sprite;
 
+    [SerializeField] private AudioSource audioSource;
     [SerializeField] private HealthBar healthBar;
     [SerializeField] private GameObject rootObject;
     [SerializeField] private int maxHealth;
@@ -41,9 +42,11 @@ public class HealthManager : MonoBehaviour
     {
         if (!immune)
         {
-            healthBar.health -= amt * (CompareTag("Player") ? PlayerData.Instance.dmgMult : 1);
-            StartCoroutine(DamageEffect());
-            //AudioController.Instance.PlayEffect(1);           
+            float dmg = amt * (CompareTag("Player") ? PlayerData.Instance.dmgMult : 1);
+
+            if (dmg > 0) StartCoroutine(DamageEffect());
+            healthBar.health -= dmg;            
+            AudioController.Instance.PlayEffect(audioSource, 8);           
 
             if (healthBar.health <= 0)
             {
@@ -73,6 +76,15 @@ public class HealthManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Restore health by a flat amount and/or percent.
+    /// </summary>
+    public void Heal(int amt, float pct)
+    {
+        healthBar.health += amt;
+        healthBar.health += healthBar.maxHealth * pct;
     }
 
     /// <summary>

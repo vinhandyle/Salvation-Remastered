@@ -9,16 +9,23 @@ using UnityEngine.UI;
 /// </summary>
 public class PlayerShooter : MonoBehaviour
 {
+    private HealthManager health;   
+
     [SerializeField] private Camera cam;
     [SerializeField] private Texture2D reticle;
     [SerializeField] private Transform rotator;
     [SerializeField] private Transform shootPoint;
+
+    [SerializeField] private AudioSource shootAudio;
+    [SerializeField] private AudioSource miscAudio;
+
 
     [SerializeField] private List<GameObject> projectiles;
     [SerializeField] private List<float> projSpeeds;
     private float projSpeed;
 
     [SerializeField] private List<float> useTimes;
+    [SerializeField] private ResourceBar useTimeBar;
     private float useTime;
     private float useTimer;
 
@@ -28,6 +35,7 @@ public class PlayerShooter : MonoBehaviour
     [SerializeField] private float rechargeSpeed;
     private List<float> energyLeft = new List<float>();
     private List<bool> recharging = new List<bool>();
+    private EnergySource energySource;
 
     private enum Mode
     { 
@@ -36,10 +44,13 @@ public class PlayerShooter : MonoBehaviour
         Minigun,
         Railgun,
         Grenade,
-        Rocket
+        Rocket,
+        Heal
     }
-    [SerializeField] private Mode mode;
-    [SerializeField] private List<Mode> quickSelect;
+    private Mode mode;
+    private Mode prevMode;
+    private List<Mode> quickSelect;
+
     [SerializeField] private List<Sprite> weaponSprites;
     [SerializeField] private Image currentWeaponDisplay;
 
@@ -50,8 +61,14 @@ public class PlayerShooter : MonoBehaviour
     [Header("Minigun")]
     [SerializeField] private float minigunSpread;
 
+    [Header("Heal")]
+    [SerializeField] private float healPct;
+    [SerializeField] private GameObject healParticles;
+
     private void Awake()
     {
+        health = GetComponent<HealthManager>();
+
         Cursor.SetCursor(reticle, new Vector2(), CursorMode.Auto);
         useTimer = useTime;
         energyBar.SetDefaults(maxEnergy);
@@ -63,27 +80,43 @@ public class PlayerShooter : MonoBehaviour
         }
 
         mode = (Mode)PlayerData.Instance.currentEquipped;
+        quickSelect = new List<Mode>();
     }
 
     private void Update()
     {
         int i = (int)mode;
 
-        UpdateQuickSelect();
-
-        Aim();
-        Swap();
-        useTimer -= Time.deltaTime;
-
-        if (Input.GetMouseButton(0) && !recharging[i] && useTimer <= 0)
+        if (GameStateManager.Instance.currentState != GameStateManager.GameState.PAUSED)
         {
-            Shoot();
-            useTimer = useTime;
-        }
+            UpdateQuickSelect();
 
-        Recharge();
-        energyBar.SetEnergy(energyLeft[i]);
-        energyBar.SetRecharge(recharging[i]);
+            Aim();
+            Swap();
+            useTimer -= Time.deltaTime;
+            useTimeBar.SetValue(useTimer);
+
+            if (Input.GetMouseButton(0) && !recharging[i] && useTimer <= 0)
+            {
+                Shoot();
+                useTimer = useTime;
+                useTimeBar.SetDefaults(useTimer);
+            }
+
+            Recharge();
+            energyBar.SetValue(energyLeft[i]);
+            energyBar.SetRecharge(recharging[i]);
+        }        
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        energySource = collision.GetComponent<EnergySource>() ?? energySource;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.GetComponent<EnergySource>()) energySource = null;
     }
 
     private void UpdateQuickSelect()
@@ -96,7 +129,7 @@ public class PlayerShooter : MonoBehaviour
                 quickSelect.Add((Mode)i);
         }
 
-        if (!quickSelect.Contains(mode))
+        if (mode != Mode.Heal && !quickSelect.Contains(mode))
         {
             mode = quickSelect[0];
             PlayerData.Instance.currentEquipped = (int)mode;
@@ -107,8 +140,28 @@ public class PlayerShooter : MonoBehaviour
     {
         int mouseScrollDelta = (int)Input.mouseScrollDelta.y;
 
-        if (mouseScrollDelta != 0 && !Input.GetMouseButton(0))
+        // Quick swap to/from heal
+        if (Input.GetMouseButtonDown(1))
         {
+            if (mode != Mode.Heal)
+            {
+                prevMode = mode;
+                mode = Mode.Heal;
+                useTimer = 0;
+            }
+            else
+            {
+                mode = prevMode;
+            }
+            AudioController.Instance.PlayEffect(miscAudio, 6);
+        }
+        // Scroll through equipped weapons
+        else if (mouseScrollDelta != 0 && !Input.GetMouseButton(0))
+        {
+            // Swap out of heal first
+            if (mode == Mode.Heal) mode = prevMode;
+
+            // Get next weapon
             int i = quickSelect.IndexOf(mode) - mouseScrollDelta;
 
             // Handle out of bounds
@@ -120,6 +173,7 @@ public class PlayerShooter : MonoBehaviour
             useTimer = 0;
             mode = quickSelect[i];            
             PlayerData.Instance.currentEquipped = (int)mode;
+            AudioController.Instance.PlayEffect(miscAudio, 6);
         }
 
         currentWeaponDisplay.sprite = weaponSprites[(int)mode];
@@ -144,17 +198,46 @@ public class PlayerShooter : MonoBehaviour
         {
             case Mode.Standard:
                 Shoot(0);
+                AudioController.Instance.PlayEffect(shootAudio, 0);
                 break;
 
             case Mode.Shotgun:
                 for (int i = 0; i < Random.Range(shotgunAmt[0], shotgunAmt[1]); i++)
                 {
-                    Shoot(0, Random.Range(-shotgunSpread, shotgunSpread));
+                    Shoot(1, Random.Range(-shotgunSpread, shotgunSpread));
                 }
+                AudioController.Instance.PlayEffect(shootAudio, 1);
                 break;
 
             case Mode.Minigun:
-                Shoot(0, Random.Range(-minigunSpread, minigunSpread));
+                Shoot(1, Random.Range(-minigunSpread, minigunSpread));
+                AudioController.Instance.PlayEffect(shootAudio, 2);
+                break;
+
+            case Mode.Railgun:
+                RaycastHit2D hit = Physics2D.RaycastAll(transform.position, shootPoint.rotation * shootPoint.localPosition, Mathf.Infinity)
+                                               .Where(hit => hit.collider.gameObject.layer == 6)
+                                               .OrderBy(hit => hit.distance)
+                                               .FirstOrDefault();
+
+                SolidBeam proj = Instantiate(projectiles[2]).GetComponent<SolidBeam>();
+                proj.SetDefaults(transform.position, hit.point);
+                AudioController.Instance.PlayEffect(shootAudio, 3);
+                break;
+
+            case Mode.Grenade:
+                Shoot(3);
+                AudioController.Instance.PlayEffect(shootAudio, 4);
+                break;
+
+            case Mode.Rocket:
+                Shoot(4);
+                AudioController.Instance.PlayEffect(shootAudio, 5);
+                break;
+
+            case Mode.Heal:
+                health.Heal(0, healPct);
+                Instantiate(healParticles, transform);
                 break;
         }
 
@@ -168,11 +251,8 @@ public class PlayerShooter : MonoBehaviour
 
     private void Shoot(int projType, float dRot = 0)
     {
-        GameObject proj = Instantiate(projectiles[projType], shootPoint.position, shootPoint.rotation).gameObject;
-        proj.transform.localEulerAngles = new Vector3(0, 0, proj.transform.localEulerAngles.z + dRot);
-        
-        proj.GetComponent<Projectile>().SetOrigin(transform);
-        proj.GetComponent<Rigidbody2D>().velocity = proj.transform.right * projSpeed;
+        Projectile proj = Instantiate(projectiles[projType], shootPoint.position, shootPoint.rotation).GetComponent<Projectile>();
+        proj.SetDefaults(transform, dRot, projSpeed);
     }
 
     private void Recharge()
@@ -182,10 +262,13 @@ public class PlayerShooter : MonoBehaviour
 
         for (int i = 0; i < recharging.Count; i++)
         {
+            float energySourceMult = energySource ? energySource.rechargeMult : 0;
             float rechargeMult = (i == (int)mode) ? 1 : 0.25f;
 
             if (recharging[i])
-                energyLeft[i] += Time.deltaTime * rechargeSpeed * rechargeMult;
+                energyLeft[i] += Time.deltaTime * (rechargeSpeed + energySourceMult) * rechargeMult;
+            else
+                energyLeft[i] += Time.deltaTime * energySourceMult * rechargeMult;
 
             if (energyLeft[i] >= maxEnergy)
             {

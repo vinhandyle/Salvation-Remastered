@@ -35,11 +35,14 @@ public class PlayerData : Singleton<PlayerData>
         challenges = new HashSet<string>();
         expertChallenges = new HashSet<string>();
 
-        equipped = new bool[6];
-        unlocked = new bool[6];
-        equipped[0] = true;
+        equipped = new bool[7];
+        unlocked = new bool[7];
+        equipped[0] = true;        
         unlocked[0] = true;
         dmgMult = 1;
+
+        for (int i = 1; i < equipped.Length; i++)
+            equipped[i] = true;
     }
 
     public void LoadData(object data)

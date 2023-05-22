@@ -2,10 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grenade : Projectile
+public class Grenade : ExplodingProjectile
 {
-    private void Awake()
+    protected BouncingObject bo;
+
+    protected override void Awake()
     {
-        AI += () => { };
+        base.Awake();
+
+        bo = GetComponent<BouncingObject>();
+        OnTerrainHit += (obj) => { bo.Bounce(obj); };
     }
 }

@@ -4679,6 +4679,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 377646100}
     - target: {fileID: 789190699833864934, guid: d6f339e6b7a28464e80b814d4e00b67c, type: 3}
+      propertyPath: useTimeBar
+      value: 
+      objectReference: {fileID: 5557959987193401370}
+    - target: {fileID: 789190699833864934, guid: d6f339e6b7a28464e80b814d4e00b67c, type: 3}
       propertyPath: currentWeaponDisplay
       value: 
       objectReference: {fileID: 462746386}
@@ -8203,6 +8207,7 @@ MonoBehaviour:
   cldr: {fileID: 0}
   damage: 100
   destroyOnHit: 0
+  destroyOnCrossFire: 0
   canKnockback: 1
   knockbackAmt: 2.5
   targetTags: []
@@ -18473,5 +18478,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6836911126078923897, guid: 04ebc08ea3791384eb11a7ee6199cecd, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04ebc08ea3791384eb11a7ee6199cecd, type: 3}
+--- !u!114 &5557959987193401370 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7239789050717012120, guid: 04ebc08ea3791384eb11a7ee6199cecd, type: 3}
+  m_PrefabInstance: {fileID: 5557959987193401369}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b269bc3886456742b0268d70b429c90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

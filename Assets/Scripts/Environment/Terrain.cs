@@ -44,6 +44,8 @@ public class Terrain : MonoBehaviour
     /// </summary>
     private void PositionCenterCollider(BoxCollider2D cldr)
     {
+        cldr.name = "Center";
+
         cldr.size = new Vector2(
             box.size.x - 0.006f,
             box.size.y - 0.006f
@@ -58,6 +60,8 @@ public class Terrain : MonoBehaviour
     /// </summary>
     private void PositionSplitCollider(BoxCollider2D cldr, float angle)
     {
+        cldr.name = string.Format("Side {0}", angle);
+
         // Set size to match corresponding side of the original
         float len = (angle % 180 == 0) ? box.size.x : box.size.y;
 

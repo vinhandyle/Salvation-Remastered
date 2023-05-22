@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -11,8 +12,6 @@ public class AudioController : Singleton<AudioController>
 {
     [SerializeField] private AudioMixer mixer;
     [SerializeField] private AudioSource musicSource;
-    [SerializeField] private AudioSource playerSfxSource;
-    [SerializeField] private AudioSource envSfxSource;
     [SerializeField] private List<AudioClip> playlist;
     [SerializeField] private List<AudioClip> sfxList;
 
@@ -48,13 +47,9 @@ public class AudioController : Singleton<AudioController>
     /// <summary>
     /// Play the specified sfx from the list. Don't loop by default.
     /// </summary>
-    public void PlayEffect(int effectNum, bool loop = false)
+    public void PlayEffect(AudioSource audioSource, int effectNum, bool loop = false)
     {
-        // Update value to match # of player SFX
-        if (effectNum < 4)
-            PlayEffect(playerSfxSource, sfxList[effectNum], loop);
-        else
-            PlayEffect(envSfxSource, sfxList[effectNum], loop);
+        PlayEffect(audioSource, sfxList[effectNum], loop);
     }
 
     private void PlayEffect(AudioSource src, AudioClip clip, bool loop)
@@ -70,7 +65,6 @@ public class AudioController : Singleton<AudioController>
     /// </summary>
     public void ClearEffects()
     {
-        playerSfxSource.Stop();
-        envSfxSource.Stop();
+        FindObjectsOfType<AudioSource>().ToList().ForEach(src => src.Stop());
     }
 }

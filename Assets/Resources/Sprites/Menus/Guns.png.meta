@@ -230,6 +230,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Guns_6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f288471f372295a4f9beccbf6b423b28
+      internalID: 464052149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -244,6 +265,7 @@ TextureImporter:
       Guns_2: 803531262
       Guns_0: 1983012594
       Guns_1: -1523305705
+      Guns_6: 464052149
       Guns_3: -237066323
       Guns_4: -2137891312
       Guns_5: -724850415
