@@ -17,6 +17,8 @@ public class HealthManager : MonoBehaviour
     [SerializeField] private int maxHealth;
     [SerializeField] private bool immune;
 
+    public bool noHit { get; private set; }
+
     public event Action OnDying;
     public event Action OnDeath;
 
@@ -25,6 +27,8 @@ public class HealthManager : MonoBehaviour
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
         healthBar?.SetDefaults(maxHealth);
+
+        noHit = true;
     }
 
     /// <summary>
@@ -43,6 +47,7 @@ public class HealthManager : MonoBehaviour
         if (!immune)
         {
             float dmg = amt * (CompareTag("Player") ? PlayerData.Instance.dmgMult : 1);
+            noHit = false;
 
             if (dmg > 0) StartCoroutine(DamageEffect());
             healthBar.health -= dmg;            

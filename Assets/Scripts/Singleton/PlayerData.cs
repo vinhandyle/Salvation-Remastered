@@ -35,8 +35,8 @@ public class PlayerData : Singleton<PlayerData>
         challenges = new HashSet<string>();
         expertChallenges = new HashSet<string>();
 
-        equipped = new bool[7];
-        unlocked = new bool[7];
+        equipped = new bool[6];
+        unlocked = new bool[6];
         equipped[0] = true;        
         unlocked[0] = true;
         dmgMult = 1;
@@ -67,7 +67,7 @@ public class PlayerData : Singleton<PlayerData>
         {
             if (type == 0)
             {
-                if (key.EndsWith('E'))
+                if (expertMode)
                 {
                     if (!expertNoHits.Contains(key))
                         expertNoHits.Add(key);
@@ -80,7 +80,7 @@ public class PlayerData : Singleton<PlayerData>
             }
             else
             {
-                if (key.EndsWith('E'))
+                if (expertMode)
                 {
                     if (!expertChallenges.Contains(key))
                         expertChallenges.Add(key);

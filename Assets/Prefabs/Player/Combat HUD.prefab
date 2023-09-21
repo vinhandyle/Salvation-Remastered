@@ -586,6 +586,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6568449921043959366}
+  - component: {fileID: 9030339353872080393}
   m_Layer: 5
   m_Name: Combat HUD
   m_TagString: Untagged
@@ -616,6 +617,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &9030339353872080393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6568449921043959361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 624d450e4c83c494cb7f150757bc43e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  boss: []
 --- !u!1001 &5897158432031117980
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -717,6 +732,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5557959987780955349, guid: 04ebc08ea3791384eb11a7ee6199cecd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836911126078923897, guid: 04ebc08ea3791384eb11a7ee6199cecd, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

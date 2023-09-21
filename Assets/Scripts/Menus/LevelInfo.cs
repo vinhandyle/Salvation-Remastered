@@ -46,36 +46,6 @@ public class LevelInfo : TerminalMenu
     private void SetChallenge(string key)
     {
         challenge.text = "<color=red>CHALLENGE:</color>\n";
-
-        switch (key)
-        {
-            case "Boss01":
-                challenge.text += "REGULAR GUN ONLY\nNO DASH\nNO WALL CLIMB\nNO DOUBLE JUMP";
-                break;
-
-            case "Boss02":
-                challenge.text += "REGULAR GUN ONLY\nNO WALL CLIMB\nNO DOUBLE JUMP";
-                break;
-
-            case "Boss03":
-                challenge.text += "DON'T TOUCH WATER";
-                break;
-
-            case "Boss04":
-                challenge.text += "REGULAR GUN ONLY";
-                break;
-
-            case "Boss05":
-                challenge.text += "NO WALL CLIMB\nNO DOUBLE JUMP";
-                break;
-
-            case "Boss08":
-                challenge.text += "DELIVER THE FINISHING BLOW WITH THE RAIL GUN";
-                break;
-
-            default:
-                challenge.text += "TBD";
-                break;
-        }
+        challenge.text += TextDatabase.Instance.txtDB["challenge/" + key];       
     }
 }

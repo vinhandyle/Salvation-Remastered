@@ -4931,7 +4931,7 @@ MonoBehaviour:
   expertNoHit: {fileID: 667046399}
   challenge: {fileID: 449503563}
   expertChallenge: {fileID: 570023669}
-  key: Gauntlet2
+  key: BossG2
 --- !u!114 &507963749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13342,7 +13342,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 74717812}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.7083333
+  m_Size: 0.70833325
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -14766,7 +14766,7 @@ MonoBehaviour:
   expertNoHit: {fileID: 542882667}
   challenge: {fileID: 1505984803}
   expertChallenge: {fileID: 1674108949}
-  key: Gauntlet1
+  key: BossG1
 --- !u!114 &1692348661
 MonoBehaviour:
   m_ObjectHideFlags: 0

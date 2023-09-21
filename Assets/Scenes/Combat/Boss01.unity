@@ -2888,6 +2888,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8386500424942036218, guid: d6f339e6b7a28464e80b814d4e00b67c, type: 3}
   m_PrefabInstance: {fileID: 1605020180}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1605020182 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8386500424942036217, guid: d6f339e6b7a28464e80b814d4e00b67c, type: 3}
+  m_PrefabInstance: {fileID: 1605020180}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dbfc22bb09e53f458e0c540d648d84a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1628543105
 GameObject:
   m_ObjectHideFlags: 0
@@ -4031,7 +4042,19 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1201098815}
     m_Modifications:
+    - target: {fileID: 1096481560086165221, guid: a37598ac6f9720b47bf40b3f2b634f90, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1586961758426648115, guid: a37598ac6f9720b47bf40b3f2b634f90, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087204504382473468, guid: a37598ac6f9720b47bf40b3f2b634f90, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087204505059419267, guid: a37598ac6f9720b47bf40b3f2b634f90, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
@@ -4131,6 +4154,18 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9030339353872080393, guid: a37598ac6f9720b47bf40b3f2b634f90, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1605020182}
+    - target: {fileID: 9030339353872080393, guid: a37598ac6f9720b47bf40b3f2b634f90, type: 3}
+      propertyPath: boss.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9030339353872080393, guid: a37598ac6f9720b47bf40b3f2b634f90, type: 3}
+      propertyPath: boss.Array.data[0]
+      value: 
+      objectReference: {fileID: 7271038275411559900}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a37598ac6f9720b47bf40b3f2b634f90, type: 3}
 --- !u!114 &1586961759328630596 stripped
@@ -4202,6 +4237,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 366649924}
     - target: {fileID: 7271038275145091008, guid: 8fd7a4926e7d45842b58b739c37c42f6, type: 3}
+      propertyPath: debug
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7271038275145091008, guid: 8fd7a4926e7d45842b58b739c37c42f6, type: 3}
       propertyPath: timer
       value: 
       objectReference: {fileID: 78215791}
@@ -4215,7 +4254,7 @@ PrefabInstance:
       objectReference: {fileID: 407145377}
     - target: {fileID: 7271038275145091008, guid: 8fd7a4926e7d45842b58b739c37c42f6, type: 3}
       propertyPath: debugStage
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7271038275145091008, guid: 8fd7a4926e7d45842b58b739c37c42f6, type: 3}
       propertyPath: scorchedEarth
@@ -4275,3 +4314,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8fd7a4926e7d45842b58b739c37c42f6, type: 3}
+--- !u!114 &7271038275411559900 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7271038274701877377, guid: 8fd7a4926e7d45842b58b739c37c42f6, type: 3}
+  m_PrefabInstance: {fileID: 7271038275411559899}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dbfc22bb09e53f458e0c540d648d84a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

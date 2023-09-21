@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// </summary>
 public class PlayerShooter : MonoBehaviour
 {
-    private HealthManager health;   
+    private HealthManager health;
 
     [SerializeField] private Camera cam;
     [SerializeField] private Texture2D reticle;
@@ -197,47 +197,31 @@ public class PlayerShooter : MonoBehaviour
         switch (mode)
         {
             case Mode.Standard:
-                Shoot(0);
-                AudioController.Instance.PlayEffect(shootAudio, 0);
+                StandardShoot();
                 break;
 
             case Mode.Shotgun:
-                for (int i = 0; i < Random.Range(shotgunAmt[0], shotgunAmt[1]); i++)
-                {
-                    Shoot(1, Random.Range(-shotgunSpread, shotgunSpread));
-                }
-                AudioController.Instance.PlayEffect(shootAudio, 1);
+                ShotgunShoot();
                 break;
 
             case Mode.Minigun:
-                Shoot(1, Random.Range(-minigunSpread, minigunSpread));
-                AudioController.Instance.PlayEffect(shootAudio, 2);
+                MinigunShoot();
                 break;
 
             case Mode.Railgun:
-                RaycastHit2D hit = Physics2D.RaycastAll(transform.position, shootPoint.rotation * shootPoint.localPosition, Mathf.Infinity)
-                                               .Where(hit => hit.collider.gameObject.layer == 6)
-                                               .OrderBy(hit => hit.distance)
-                                               .FirstOrDefault();
-
-                SolidBeam proj = Instantiate(projectiles[2]).GetComponent<SolidBeam>();
-                proj.SetDefaults(transform.position, hit.point);
-                AudioController.Instance.PlayEffect(shootAudio, 3);
+                RailgunShoot();
                 break;
 
             case Mode.Grenade:
-                Shoot(3);
-                AudioController.Instance.PlayEffect(shootAudio, 4);
+                GrenadeShoot();
                 break;
 
             case Mode.Rocket:
-                Shoot(4);
-                AudioController.Instance.PlayEffect(shootAudio, 5);
+                RocketShoot();
                 break;
 
             case Mode.Heal:
-                health.Heal(0, healPct);
-                Instantiate(healParticles, transform);
+                HealShoot();
                 break;
         }
 
@@ -254,6 +238,61 @@ public class PlayerShooter : MonoBehaviour
         Projectile proj = Instantiate(projectiles[projType], shootPoint.position, shootPoint.rotation).GetComponent<Projectile>();
         proj.SetDefaults(transform, dRot, projSpeed);
     }
+
+    #region Shoot Types
+
+    private void StandardShoot()
+    {
+        Shoot(0);
+        AudioController.Instance.PlayEffect(shootAudio, 0);
+    }
+
+    private void ShotgunShoot()
+    {
+        for (int i = 0; i < Random.Range(shotgunAmt[0], shotgunAmt[1]); i++)
+        {
+            Shoot(1, Random.Range(-shotgunSpread, shotgunSpread));
+        }
+        AudioController.Instance.PlayEffect(shootAudio, 1);
+    }
+
+    private void MinigunShoot()
+    {
+        Shoot(1, Random.Range(-minigunSpread, minigunSpread));
+        AudioController.Instance.PlayEffect(shootAudio, 2);
+    }
+
+    private void RailgunShoot()
+    {
+        RaycastHit2D hit = Physics2D.RaycastAll(transform.position, shootPoint.rotation * shootPoint.localPosition, Mathf.Infinity)
+                                               .Where(hit => hit.collider.gameObject.layer == 6)
+                                               .OrderBy(hit => hit.distance)
+                                               .FirstOrDefault();
+
+        SolidBeam proj = Instantiate(projectiles[2]).GetComponent<SolidBeam>();
+        proj.SetDefaults(transform.position, hit.point);
+        AudioController.Instance.PlayEffect(shootAudio, 3);
+    }
+
+    private void GrenadeShoot()
+    {
+        Shoot(3);
+        AudioController.Instance.PlayEffect(shootAudio, 4);
+    }
+
+    private void RocketShoot()
+    {
+        Shoot(4);
+        AudioController.Instance.PlayEffect(shootAudio, 5);
+    }
+
+    private void HealShoot()
+    {
+        health.Heal(0, healPct);
+        Instantiate(healParticles, transform);
+    }
+
+    #endregion
 
     private void Recharge()
     {

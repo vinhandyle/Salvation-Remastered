@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <name>
+    <text>
+      <key>Gun0</key>
+      <value>&lt;color=yellow&gt;Handgun&lt;/color&gt;</value>
+    </text>
+    <text>
+      <key>Gun1</key>
+      <value>&lt;color=yellow&gt;Shotgun&lt;/color&gt;</value>
+    </text>
+    <text>
+      <key>Gun2</key>
+      <value>&lt;color=yellow&gt;Minigun&lt;/color&gt;</value>
+    </text>
+    <text>
+      <key>Gun3</key>
+      <value>&lt;color=yellow&gt;Railgun&lt;/color&gt;</value>
+    </text>
+    <text>
+      <key>Gun4</key>
+      <value>&lt;color=yellow&gt;Grenade Launcher&lt;/color&gt;</value>
+    </text>
+    <text>
+      <key>Gun5</key>
+      <value>&lt;color=yellow&gt;Rocket Launcher&lt;/color&gt;</value>
+    </text>
+    <text>
+      <key>Dash</key>
+      <value>&lt;color=yellow&gt;Booster Rocket&lt;/color&gt;</value>
+    </text>
+    <text>
+      <key>Wall Jump</key>
+      <value>&lt;color=yellow&gt;Climbing Claws&lt;/color&gt;</value>
+    </text>
+    <text>
+      <key>Double Jump</key>
+      <value>&lt;color=yellow&gt;Booster Rocket V2&lt;/color&gt;</value>
+    </text>
+    <text>
+      <key>Expert:false</key>
+      <value>&lt;color=grey&gt;Standard Badge&lt;/color&gt;</value>
+    </text>
+    <text>
+      <key>Expert:true</key>
+      <value>&lt;color=red&gt;Expert Badge&lt;/color&gt;</value>
+    </text>
+    <text>
+      <key>Dmg:0</key>
+      <value>&lt;color=#00FFFF&gt;Practice Reactor&lt;/color&gt;</value>
+    </text>
+    <text>
+      <key>Dmg:1</key>
+      <value>&lt;color=green&gt;Basic Reactor&lt;/color&gt;</value>
+    </text>
+    <text>
+      <key>Dmg:1000</key>
+      <value>&lt;color=#EFA700&gt;Unstable Reactor&lt;/color&gt;</value>
+    </text>
+  </name>
+  <description>
+    <text>
+      <key>Gun0</key>
+      <value>A gun.</value>
+    </text>
+    <text>
+      <key>Gun1</key>
+      <value>A gun with spread shot.</value>
+    </text>
+    <text>
+      <key>Gun2</key>
+      <value>A gun with rapid fire.</value>
+    </text>
+    <text>
+      <key>Gun3</key>
+      <value>A gun with insane pierce.</value>
+    </text>
+    <text>
+      <key>Gun4</key>
+      <value>Lots of explosions.</value>
+    </text>
+    <text>
+      <key>Gun5</key>
+      <value>Massive explosions.</value>
+    </text>
+    <text>
+      <key>Dash</key>
+      <value>Grants the ability to dash along the ground or through the air.</value>
+    </text>
+    <text>
+      <key>Wall Jump</key>
+      <value>Grants the ability to cling to and leap off walls.</value>
+    </text>
+    <text>
+      <key>Double Jump</key>
+      <value>Grants the ability to jump again while mid-air.</value>
+    </text>
+    <text>
+      <key>Expert:false</key>
+      <value>Wear to access the standard combat simulations.</value>
+    </text>
+    <text>
+      <key>Expert:true</key>
+      <value>Wear to access the enhanced combat simulations.</value>
+    </text>
+    <text>
+      <key>Dmg:0</key>
+      <value>You take no damage. Timers and challenges are disabled.</value>
+    </text>
+    <text>
+      <key>Dmg:1</key>
+      <value>Equip for the intended experience.</value>
+    </text>
+    <text>
+      <key>Dmg:1000</key>
+      <value>You will die in one hit.</value>
+    </text>
+  </description>
+  <challenge>
+    <text>
+      <key>Boss01</key>
+      <value>REGULAR GUN ONLY
+NO DASH
+NO WALL CLIMB
+NO DOUBLE JUMP</value>
+    </text>
+    <text>
+      <key>Boss02</key>
+      <value>REGULAR GUN ONLY
+NO WALL CLIMB
+NO DOUBLE JUMP</value>
+    </text>
+    <text>
+      <key>Boss03</key>
+      <value>DON'T TOUCH WATER</value>
+    </text>
+    <text>
+      <key>Boss04</key>
+      <value>REGULAR GUN ONLY</value>
+    </text>
+    <text>
+      <key>Boss05</key>
+      <value>NO WALL CLIMB
+NO DOUBLE JUMP</value>
+    </text>
+    <text>
+      <key>Boss06</key>
+      <value>TBD</value>
+    </text>
+    <text>
+      <key>Boss07</key>
+      <value>TBD</value>
+    </text>
+    <text>
+      <key>Boss08</key>
+      <value>DELIVER THE FINISHING BLOW WITH THE RAIL GUN</value>
+    </text>
+    <text>
+      <key>BossG1</key>
+      <value>TBD</value>
+    </text>
+    <text>
+      <key>BossG2</key>
+      <value>TBD</value>
+    </text>
+  </challenge>
+</root>
