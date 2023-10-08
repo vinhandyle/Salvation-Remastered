@@ -101,10 +101,8 @@ public class OverseerBoss : Enemy
             StartCoroutine(Begin());
     }
 
-    protected override void Update()
+    private void Update()
     {
-        base.Update();
-
         // Stop all attacks if dead
         if (health.health <= 0)
         {
@@ -196,11 +194,11 @@ public class OverseerBoss : Enemy
             yield return new WaitForSeconds(3);
 
             if (rand < 100)
-                StartCoroutine(RampingFire()); // 30%
+                StartCoroutine(RampingFire()); // 33%
             else if (rand < 200)
-                StartCoroutine(ExplodingShot()); // 30%
+                StartCoroutine(ExplodingShot()); // 33%
             else
-                StartCoroutine(ScorchedEarth()); // 30%
+                StartCoroutine(ScorchedEarth()); // 33%
         }
     }
 
@@ -244,6 +242,7 @@ public class OverseerBoss : Enemy
 
         for (int i = 0; i < rpBullets; i++)
         {
+            Aim(player.transform.position);
             Shoot(0, rpFireSpeed);
             yield return new WaitForSeconds(_rpFireRate);
             _rpFireRate *= 1 - rpFireRateInc;
@@ -256,6 +255,7 @@ public class OverseerBoss : Enemy
     {
         stage = Stage.ExplodingShot;
 
+        Aim(player.transform.position);
         FragProjectile proj = Shoot(1, esFireSpeed).GetComponent<FragProjectile>();
         proj.SetDefaults(esFrags, esFragSpeed);
 

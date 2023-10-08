@@ -16,7 +16,7 @@ public class TickDamagingObject : DamagingObject
             tickTimer += Time.deltaTime;
             if (tickTimer >= tickSpeed)
             {
-                if (health != null) health.TakeDamage(damage);
+                if (health != null) health.TakeDamage(Mathf.RoundToInt(damage * dmgMult));
                 tickTimer = 0;
             }
         } 

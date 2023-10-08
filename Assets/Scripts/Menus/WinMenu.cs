@@ -22,7 +22,7 @@ public class WinMenu : MonoBehaviour
         {
             imgs[ranks[0]].transform.localPosition = new Vector2(0, 35);
         }
-        else
+        else if (ranks.Count == 2)
         {
             imgs[ranks[0]].transform.localPosition = new Vector2(-35, 35);
             imgs[ranks[1]].transform.localPosition = new Vector2(35, 35);

@@ -14,6 +14,7 @@ public class HealthManager : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private HealthBar healthBar;
     [SerializeField] private GameObject rootObject;
+    [SerializeField] private DeathExplosion deathExplosion;
     [SerializeField] private int maxHealth;
     [SerializeField] private bool immune;
 
@@ -76,6 +77,9 @@ public class HealthManager : MonoBehaviour
                     {
                         OnDying?.Invoke();
                         OnDying = null;
+
+                        if (deathExplosion)
+                            deathExplosion.gameObject.SetActive(true);
                         anim.SetTrigger("OnDestroy");
                     }
                 }

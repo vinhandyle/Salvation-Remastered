@@ -24,12 +24,12 @@ public class PlayerController : MonoBehaviour
     private bool canJumpMidair;
 
     [SerializeField] private float slidingSpeed;
-    private bool sliding;
+    public bool sliding { get; private set; }
 
     [SerializeField] private float wallJumpHeight;
     [SerializeField] private float wallJumpWidth;
     [SerializeField] private float wallJumpTime;
-    private bool wallJumping;
+    public bool wallJumping { get; private set; }
 
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashLength;
@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashCd;
     [SerializeField] private bool dashImmunity;
     private bool canDash;
-    private bool dashing;
+    public bool dashing { get; private set; }
 
     [Header("Ground & Wall Detection")]
     [SerializeField] private LayerMask isTerrain;

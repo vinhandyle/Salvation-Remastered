@@ -64,15 +64,18 @@ public class AchievementManager : MonoBehaviour
     {
         List<int> ranks = new List<int>();
 
-        if (PlayerData.Instance.expertMode)
+        if (PlayerData.Instance.dmgMult > 0)
         {
-            if (player.noHit) ranks.Add(2);
-            if (challengeCompleted) ranks.Add(3);
-        }
-        else
-        {
-            if (player.noHit) ranks.Add(0);
-            if (challengeCompleted) ranks.Add(1);
+            if (PlayerData.Instance.expertMode)
+            {
+                if (player.noHit) ranks.Add(2);
+                if (challengeCompleted) ranks.Add(3);
+            }
+            else
+            {
+                if (player.noHit) ranks.Add(0);
+                if (challengeCompleted) ranks.Add(1);
+            }
         }
 
         return ranks;

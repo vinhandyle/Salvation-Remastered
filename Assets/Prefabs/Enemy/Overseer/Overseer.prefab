@@ -153,6 +153,7 @@ MonoBehaviour:
   audioSource: {fileID: 6924498463520016837}
   healthBar: {fileID: 0}
   rootObject: {fileID: 7271038275145091010}
+  deathExplosion: {fileID: 9167361033022278873}
   maxHealth: 500
   immune: 0
 --- !u!82 &6924498463520016837
@@ -284,6 +285,7 @@ Transform:
   - {fileID: 7271038275644201854}
   - {fileID: 7271038275416786884}
   - {fileID: 7271038276507003055}
+  - {fileID: 2108117059334612862}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -873,6 +875,87 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.24, y: 0.64}
   m_EdgeRadius: 0
+--- !u!1001 &2777288950047642291
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7271038275145091009}
+    m_Modifications:
+    - target: {fileID: 4308643975253833165, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4308643975253833165, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4308643975253833165, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4308643975253833165, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4308643975253833165, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4308643975253833165, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4308643975253833165, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4308643975253833165, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4308643975253833165, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4308643975253833165, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4308643975253833165, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6463769221258550890, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+      propertyPath: hm
+      value: 
+      objectReference: {fileID: 7271038274701877377}
+    - target: {fileID: 6644265391858249774, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+      propertyPath: m_Name
+      value: Enemy Death Explosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 6644265391858249774, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+--- !u!4 &2108117059334612862 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4308643975253833165, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+  m_PrefabInstance: {fileID: 2777288950047642291}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9167361033022278873 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6463769221258550890, guid: 23620ebc4b184b04b973c00530f348a7, type: 3}
+  m_PrefabInstance: {fileID: 2777288950047642291}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98e128f14f67cc746875fa8689c1ad5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7271038275082549831
 PrefabInstance:
   m_ObjectHideFlags: 0

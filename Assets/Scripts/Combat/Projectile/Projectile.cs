@@ -106,7 +106,7 @@ public class Projectile : DamagingObject
     public void SetDefaults(Transform origin, float angle, float projSpeed)
     {
         SetOrigin(origin);
-        transform.localEulerAngles = new Vector3(0, 0, transform.localEulerAngles.z + angle);       
+        transform.localEulerAngles = new Vector3(0, 0, transform.localEulerAngles.z + angle);
         rb.velocity = transform.right * projSpeed;
 
         OnInit?.Invoke();

@@ -26,11 +26,6 @@ public class Enemy : MonoBehaviour
         player = GameObject.Find("Player");
     }
 
-    protected virtual void Update()
-    {
-        Aim(player.transform.position);       
-    }
-
     protected void Aim(Vector3 target)
     {
         Vector2 direction = (target - rotator.position).normalized;
@@ -85,5 +80,14 @@ public class Enemy : MonoBehaviour
         Projectile proj = Instantiate(projectiles[projType], shootPoint.position, shootPoint.rotation).GetComponent<Projectile>();
         proj.SetDefaults(transform, dRot, projSpeed);
         return proj;
+    }
+
+    protected float DistanceFromArenaBox(Vector2 origin, Vector2 dir)
+    {
+        RaycastHit2D hit = Physics2D.RaycastAll(origin, dir)
+                                    .Where(ray => ray.transform.CompareTag("Arena Box"))
+                                    .First();
+
+        return hit.distance;
     }
 }

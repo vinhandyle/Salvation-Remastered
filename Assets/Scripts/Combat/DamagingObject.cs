@@ -16,6 +16,8 @@ public class DamagingObject : MonoBehaviour
     protected event Action OnDestroy;
 
     [SerializeField] protected int damage;
+    [HideInInspector] public float dmgMult = 1;
+
     [SerializeField] protected bool destroyOnHit;
     [SerializeField] protected bool destroyOnCrossFire;
     protected bool destroyed;
@@ -49,7 +51,7 @@ public class DamagingObject : MonoBehaviour
         if (ValidTarget(other))
         {
             health = other.GetComponent<HealthManager>();
-            if (health != null) health.TakeDamage(damage);
+            if (health != null) health.TakeDamage(Mathf.RoundToInt(damage * dmgMult));
 
             // Knockback player
             if (other.CompareTag("Player"))
