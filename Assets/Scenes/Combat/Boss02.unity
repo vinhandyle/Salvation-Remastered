@@ -541,7 +541,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.56, y: 2.56}
+    oldSize: {x: 0.32, y: 0.32}
     newSize: {x: 4, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 2
@@ -591,8 +591,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 11519a4e012788d4fbc8377fc0e46e7a, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: c04ec55ec5f8cbb4cb3ad2d0bb56926f, type: 3}
+  m_Color: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
@@ -801,6 +801,10 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 2106340987}
+    - target: {fileID: 8386500424942036219, guid: d6f339e6b7a28464e80b814d4e00b67c, type: 3}
+      propertyPath: fallMultiplierBoost
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8386500424942036223, guid: d6f339e6b7a28464e80b814d4e00b67c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1847,7 +1851,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1392232443}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.5, y: 6.5, z: 2}
+  m_LocalPosition: {x: 6.5, y: 6.5, z: 1}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

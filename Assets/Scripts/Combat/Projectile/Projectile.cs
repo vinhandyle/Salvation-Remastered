@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -36,7 +37,11 @@ public class Projectile : DamagingObject
 
     protected virtual void Update()
     {
-        if (homing) PointToTarget(ClosestTarget());
+        if (homing)
+        {
+            PointToTarget(ClosestTarget());
+            rb.velocity = rb.velocity.magnitude * transform.right;
+        }
 
         lifetime -= Time.deltaTime;
         if (mortal && lifetime <= 0) DestroyObject();
@@ -56,14 +61,31 @@ public class Projectile : DamagingObject
 
     protected Transform ClosestTarget()
     {
-        return null;
+        GameObject target = null;
+        float distance = float.MaxValue;
+
+        foreach (string tag in targetTags)
+        {
+            foreach (GameObject obj in GameObject.FindGameObjectsWithTag(tag))
+            {
+                float distanceFromObject = ((Vector2)obj.transform.position - (Vector2)transform.position).sqrMagnitude;
+                
+                if (distanceFromObject < distance)
+                {
+                    distance = distanceFromObject;
+                    target = obj;
+                }
+            }
+        }
+
+        return target.transform;
     }
 
     /// <summary>
     /// Points the projectile towards the target.
     /// Use to homing projectiles.
     /// </summary>
-    protected void PointToTarget(Transform target)
+    protected virtual void PointToTarget(Transform target)
     {
         Vector2 direction = (target.position - transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;

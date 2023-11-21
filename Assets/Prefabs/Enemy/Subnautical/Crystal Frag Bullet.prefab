@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &635170754315001185
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1571149351303753556, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1983399442239059541, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1983399442239059541, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 15de6d8145e2c7446bdee75e9690140d, type: 3}
+    - target: {fileID: 2346007643612261959, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346007643612261959, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346007643612261959, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346007643612261959, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346007643612261959, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346007643612261959, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346007643612261959, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346007643612261959, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346007643612261959, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346007643612261959, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346007643612261959, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346007643612261959, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346007643612261959, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2744846724332358477, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3251037794258352640, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_Name
+      value: Crystal Frag Bullet
+      objectReference: {fileID: 0}
+    - target: {fileID: 5429372084292591742, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: damage
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5429372084292591742, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: fragment
+      value: 
+      objectReference: {fileID: 8241965120158922357, guid: 0647e7d83fa610d47b0b82e4d8130ce8, type: 3}
+    - target: {fileID: 5429372084292591742, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: spriteToScaleTo
+      value: 
+      objectReference: {fileID: 21300000, guid: 15de6d8145e2c7446bdee75e9690140d, type: 3}
+    - target: {fileID: 7894924281025711080, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c1a126865b691d649b832b435e5ab781, type: 3}

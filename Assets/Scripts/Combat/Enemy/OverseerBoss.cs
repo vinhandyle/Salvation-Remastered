@@ -23,8 +23,7 @@ public class OverseerBoss : Enemy
 
     [Header("Overseer")]
     [SerializeField] private HealthBar health;
-    [SerializeField] private GameObject core;
-    private Vector3 initPos;
+    [SerializeField] private GameObject core;    
     [SerializeField] private float phase2Threshold;
     private bool inPhase2;
 
@@ -33,6 +32,7 @@ public class OverseerBoss : Enemy
     [SerializeField] private float gearShiftTime1;
     [SerializeField] private float gearShiftTime2;
     private float gearShiftTimer;
+    private Vector3 initPos;
     private bool topGear;
 
     [Header("Ramping Fire")]
@@ -113,7 +113,7 @@ public class OverseerBoss : Enemy
         // Gear Shift logic (independent of main AI)
         gearShiftTimer += Time.deltaTime;
 
-        if (!uninterruptable.Contains(stage) &&
+        if (!debug && !uninterruptable.Contains(stage) &&
             ((!inPhase2 && gearShiftTimer >= gearShiftTime1) ||
             (inPhase2 && gearShiftTimer >= gearShiftTime2)))
         {

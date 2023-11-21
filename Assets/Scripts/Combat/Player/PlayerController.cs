@@ -14,11 +14,15 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
+    [HideInInspector] public float moveSpeedMult = 1;
     private int direction;
 
     [SerializeField] private float fallMultiplier;
+    [HideInInspector] public float fallMultiplierBoost = 1;
     [SerializeField] private float terminalVelocity;
+    [HideInInspector] public float terminalVelocityMult = 1;
     [SerializeField] private float jumpHeight;
+    [HideInInspector] public float jumpHeightMult = 1;
     [SerializeField] private int coyoteTime;
     private bool coyoteWalking;
     private bool canJumpMidair;
@@ -28,11 +32,13 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float wallJumpHeight;
     [SerializeField] private float wallJumpWidth;
+    [HideInInspector] public float wallJumpMult = 1;
     [SerializeField] private float wallJumpTime;
     public bool wallJumping { get; private set; }
 
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashLength;
+    [HideInInspector] public float dashSpeedMult = 1;
     private float dashTimer;
     [SerializeField] private float dashCd;
     [SerializeField] private bool dashImmunity;
@@ -40,7 +46,7 @@ public class PlayerController : MonoBehaviour
     public bool dashing { get; private set; }
 
     [Header("Ground & Wall Detection")]
-    [SerializeField] private LayerMask isTerrain;
+    [SerializeField] private List<LayerMask> isTerrain;
     [SerializeField] private float groundRadius;
     [SerializeField] private float wallRadius;
 
@@ -116,8 +122,8 @@ public class PlayerController : MonoBehaviour
         onWall = CheckPlayerOnWall();        
 
         // Fast fall
-        if (rb.velocity.y < 0 && rb.velocity.y >= -terminalVelocity)
-            rb.velocity += (fallMultiplier - 1) * Physics2D.gravity.y * Time.fixedDeltaTime * Vector2.up;
+        if (rb.velocity.y < 0 && rb.velocity.y >= -terminalVelocity * terminalVelocityMult)
+            rb.velocity += (fallMultiplier * fallMultiplierBoost - 1) * Physics2D.gravity.y * Time.fixedDeltaTime * Vector2.up;
     }
 
     #region Detectors
@@ -127,7 +133,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private bool CheckPlayerOnGround()
     {
-        Collider2D[] cldrs = Physics2D.OverlapCircleAll(groundCheck.position, groundRadius, isTerrain);
+        Collider2D[] cldrs = (from layer in isTerrain select Physics2D.OverlapCircleAll(groundCheck.position, groundRadius, layer)).SelectMany(x => x).ToArray();
         List<float> angles = new List<float>();
 
         // Check steepness of colliders relative to player
@@ -156,7 +162,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        return angles.Count() > 0;
+        return angles.Count() > 0 && rb.velocity.y == 0;
     }
 
     /// <summary>
@@ -166,7 +172,7 @@ public class PlayerController : MonoBehaviour
     {
         foreach (Transform wallCheck in wallChecks)
         {
-            Collider2D[] cldrs = Physics2D.OverlapCircleAll(wallCheck.position, wallRadius, isTerrain);
+            Collider2D[] cldrs = (from layer in isTerrain select Physics2D.OverlapCircleAll(wallCheck.position, wallRadius, layer)).SelectMany(x => x).ToArray();
 
             foreach (Collider2D cldr in cldrs)
             {
@@ -238,7 +244,7 @@ public class PlayerController : MonoBehaviour
             if (dir == 0 && onGround)
                 vY = 0;
 
-            SetHorizontalVelocity(dir, moveSpeed, new Vector2(dir * moveSpeed, vY));            
+            SetHorizontalVelocity(dir, moveSpeed * moveSpeedMult, new Vector2(dir * moveSpeed * moveSpeedMult, vY));            
         }
     }
 
@@ -250,14 +256,14 @@ public class PlayerController : MonoBehaviour
             // Wall jump
             if (sliding)
             {
-                rb.velocity = new Vector2(-direction * wallJumpWidth * moveSpeed, wallJumpHeight);
+                rb.velocity = new Vector2(-direction * wallJumpWidth * moveSpeed * moveSpeedMult, wallJumpHeight * wallJumpMult);
                 FlipX();
                 StartCoroutine(WallJumpTimer());
             }
             // Normal jump
             else if (onGround || canJumpMidair)
             {
-                rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+                rb.velocity = new Vector2(rb.velocity.x, jumpHeight * jumpHeightMult);
                 if (!onGround) canJumpMidair = false;
             }
 
@@ -268,7 +274,7 @@ public class PlayerController : MonoBehaviour
         // Hold jump
         if (Input.GetKey(KeyCode.Space) && onGround)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+            rb.velocity = new Vector2(rb.velocity.x, jumpHeight * jumpHeightMult);
             CheckCoyoteTime();
         }
 
@@ -289,7 +295,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (dashImmunity) health.SetImmunity(true);
 
-                SetHorizontalVelocity(direction, dashSpeed, dashSpeed * direction * Vector2.right);
+                SetHorizontalVelocity(direction, dashSpeed * dashSpeedMult, dashSpeed * dashSpeedMult * direction * Vector2.right);
                 dashTimer = dashLength;
                 dashing = true;               
                 StartCoroutine(DashCooldown());

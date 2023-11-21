@@ -2877,6 +2877,10 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 1768671842}
+    - target: {fileID: 8386500424942036219, guid: d6f339e6b7a28464e80b814d4e00b67c, type: 3}
+      propertyPath: fallMultiplierBoost
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8386500424942036223, guid: d6f339e6b7a28464e80b814d4e00b67c, type: 3}
       propertyPath: m_Name
       value: Player

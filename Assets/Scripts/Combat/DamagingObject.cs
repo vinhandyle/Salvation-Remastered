@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -48,7 +49,7 @@ public class DamagingObject : MonoBehaviour
     /// </summary>
     private void OnContact(GameObject other)
     {
-        if (ValidTarget(other))
+        if (ValidTarget(other) || CanCrossFire(other))
         {
             health = other.GetComponent<HealthManager>();
             if (health != null) health.TakeDamage(Mathf.RoundToInt(damage * dmgMult));
@@ -78,7 +79,12 @@ public class DamagingObject : MonoBehaviour
 
     protected bool ValidHit(GameObject obj)
     {
-        return destroyOnHit && (destroyOnCrossFire == (obj.layer == 8 || obj.layer == 10));
+        return destroyOnHit || CanCrossFire(obj);
+    }
+
+    private bool CanCrossFire(GameObject obj)
+    {
+        return destroyOnCrossFire && new int[] { 6, 7, 8, 10 }.Contains(obj.layer);
     }
 
     protected void DestroyObject()

@@ -11,6 +11,6 @@ public class Grenade : ExplodingProjectile
         base.Awake();
 
         bo = GetComponent<BouncingObject>();
-        OnTerrainHit += (obj) => { bo.Bounce(obj); };
+        OnTerrainHit += bo.Bounce;
     }
 }

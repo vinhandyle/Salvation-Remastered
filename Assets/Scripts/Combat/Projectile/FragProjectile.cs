@@ -14,8 +14,8 @@ public class FragProjectile : Projectile
     {
         base.Awake();
 
-        OnTerrainHit += (obj) => { Fragment(obj); };
-        OnPlayerHit += (obj) => { Fragment(obj); };
+        OnTerrainHit += Fragment;
+        OnPlayerHit += Fragment;
     }
 
     public void SetDefaults(int numFrags, float fragSpeed)
@@ -28,25 +28,30 @@ public class FragProjectile : Projectile
     {
         if (targetTags.Contains(obj.tag))
         {
-            for (int i = 0; i < numFrags; i++)
-            {
-                float dRot = 360 / numFrags * i;
-                float angle = transform.localEulerAngles.z + dRot;
+            Fragment();
+        }
+    }
 
-                GameObject proj = Instantiate(
-                    fragment, 
-                    new Vector3(
-                        transform.position.x + Mathf.Cos(Mathf.Deg2Rad * angle) * fragOffset, 
-                        transform.position.y + Mathf.Sin(Mathf.Deg2Rad * angle) * fragOffset, 
-                        transform.position.z
-                    ), 
-                    transform.rotation
-                ).gameObject;
+    protected virtual void Fragment()
+    {
+        for (int i = 0; i < numFrags; i++)
+        {
+            float dRot = 360 / numFrags * i;
+            float angle = transform.localEulerAngles.z + dRot;
 
-                proj.transform.localEulerAngles = new Vector3(0, 0, angle);
-                proj.GetComponent<Projectile>().SetOrigin(transform);
-                proj.GetComponent<Rigidbody2D>().velocity = proj.transform.right * fragSpeed;
-            }
+            GameObject proj = Instantiate(
+                fragment,
+                new Vector3(
+                    transform.position.x + Mathf.Cos(Mathf.Deg2Rad * angle) * fragOffset,
+                    transform.position.y + Mathf.Sin(Mathf.Deg2Rad * angle) * fragOffset,
+                    transform.position.z
+                ),
+                transform.rotation
+            ).gameObject;
+
+            proj.transform.localEulerAngles = new Vector3(0, 0, angle);
+            proj.GetComponent<Projectile>().SetOrigin(transform);
+            proj.GetComponent<Rigidbody2D>().velocity = proj.transform.right * fragSpeed;
         }
     }
 }

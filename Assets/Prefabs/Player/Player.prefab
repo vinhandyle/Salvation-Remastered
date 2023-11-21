@@ -677,6 +677,7 @@ MonoBehaviour:
   audioSource: {fileID: 4226632733725074806}
   healthBar: {fileID: 0}
   rootObject: {fileID: 0}
+  deathExplosion: {fileID: 0}
   maxHealth: 50
   immune: 0
 --- !u!114 &8386500424942036219
@@ -692,21 +693,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
+  moveSpeedMult: 1
   fallMultiplier: 1.8
+  fallMultiplierBoost: 1
   terminalVelocity: 5
+  terminalVelocityMult: 1
   jumpHeight: 6.8
+  jumpHeightMult: 1
   coyoteTime: 5
   slidingSpeed: 0.5
   wallJumpHeight: 6
   wallJumpWidth: 1
+  wallJumpMult: 1
   wallJumpTime: 0.1
   dashSpeed: 30
   dashLength: 0.1
+  dashSpeedMult: 1
   dashCd: 0.5
   dashImmunity: 1
   isTerrain:
-    serializedVersion: 2
+  - serializedVersion: 2
     m_Bits: 64
+  - serializedVersion: 2
+    m_Bits: 4096
   groundRadius: 0.11
   wallRadius: 0.05
   groundCheck: {fileID: 8386500423252034519}

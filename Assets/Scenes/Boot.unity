@@ -227,9 +227,9 @@ MonoBehaviour:
   sfxVolume: 0
   dmgMult: 0
   expertMode: 0
-  canDash: 0
-  canWallJump: 0
-  canDoubleJump: 0
+  canDash: 1
+  canWallJump: 1
+  canDoubleJump: 1
   currentEquipped: 0
   equipped: 
   unlocked: 
