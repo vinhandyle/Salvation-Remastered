@@ -17,6 +17,7 @@ public class HealthManager : MonoBehaviour
     [SerializeField] private DeathExplosion deathExplosion;
     [SerializeField] private int maxHealth;
     [SerializeField] private bool immune;
+    private float dmgMult;
 
     public bool noHit { get; private set; }
 
@@ -30,6 +31,7 @@ public class HealthManager : MonoBehaviour
         healthBar?.SetDefaults(maxHealth);
 
         noHit = true;
+        SetDamageMult();
     }
 
     /// <summary>
@@ -40,6 +42,11 @@ public class HealthManager : MonoBehaviour
         immune = i;
     }
 
+    public void SetDamageMult(float dmgMult = 1)
+    {
+        this.dmgMult = dmgMult;
+    }
+
     /// <summary>
     /// Deal the specified amount of damage to the player.
     /// </summary>
@@ -47,15 +54,18 @@ public class HealthManager : MonoBehaviour
     {
         if (!immune)
         {
-            float dmg = amt * (CompareTag("Player") ? PlayerData.Instance.dmgMult : 1);
+            float dmg = amt * (CompareTag("Player") ? PlayerData.Instance.dmgMult : dmgMult);
             noHit = false;
 
             if (dmg > 0) StartCoroutine(DamageEffect());
             healthBar.health -= dmg;            
-            AudioController.Instance.PlayEffect(audioSource, 8);           
+            AudioController.Instance.PlayEffect(audioSource, 8);
 
             if (healthBar.health <= 0)
             {
+                // Prevent simultaneous damage from multiple sources triggering multi-death
+                immune = true;
+
                 // Player: Game over
                 if (CompareTag("Player"))
                 {

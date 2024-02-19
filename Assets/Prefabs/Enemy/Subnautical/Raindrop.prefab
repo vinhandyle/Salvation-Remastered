@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2318718107659487771}
-  - component: {fileID: 2318718107659487768}
+  - component: {fileID: 5244902267934168651}
   - component: {fileID: 4666486580403907322}
   - component: {fileID: 2318718107659487769}
   - component: {fileID: 4628594321402204397}
-  - component: {fileID: 2318718107659487770}
-  m_Layer: 0
+  - component: {fileID: 4656896974808808429}
+  m_Layer: 10
   m_Name: Raindrop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,16 +28,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2318718107659487772}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 10.48, y: 3.69, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 1.625, y: 1.625, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &2318718107659487768
-BoxCollider2D:
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+--- !u!58 &5244902267934168651
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -49,19 +49,9 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.25}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.26, y: 0.16}
-    newSize: {x: 1.625, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 1
-    adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_Offset: {x: 0.15, y: 0}
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.5}
-  m_EdgeRadius: 0
+  m_Radius: 0.15
 --- !u!50 &4666486580403907322
 Rigidbody2D:
   serializedVersion: 4
@@ -70,19 +60,19 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2318718107659487772}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.0001
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_AngularDrag: 0
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!212 &2318718107659487769
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -129,7 +119,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 1.625, y: 1}
+  m_Size: {x: 0.615, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -155,7 +145,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2318718107659487770
+--- !u!114 &4656896974808808429
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -164,15 +154,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 2318718107659487772}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6e6b1aeff3fb9d4ba2674bf32026b29, type: 3}
+  m_Script: {fileID: 11500000, guid: 454312625d36d124eb34344e97a5d7ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 0}
+  anim: {fileID: 4628594321402204397}
   cldr: {fileID: 0}
-  damage: 0
+  damage: 4
   dmgMult: 1
-  destroyOnHit: 0
+  destroyOnHit: 1
   destroyOnCrossFire: 0
   canKnockback: 0
   knockbackAmt: 0
-  targetTags: []
+  targetTags:
+  - Player
+  - Arena Box
+  - Water
+  spriteToScaleTo: {fileID: 619456161, guid: 10299d686320bf6469621fdd0ff8c069, type: 3}
+  spriteRenderer: {fileID: 2318718107659487769}
+  homing: 0
+  mortal: 0
+  lifetime: 0

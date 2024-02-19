@@ -13,6 +13,7 @@ public class Projectile : DamagingObject
     [Header("Sprite")]
     [SerializeField] private Sprite spriteToScaleTo;
     [SerializeField] private SpriteRenderer spriteRenderer;
+    private Vector2 refDim;
 
     [Header("Other")]
     [SerializeField] protected bool homing;
@@ -33,6 +34,7 @@ public class Projectile : DamagingObject
     protected override void Awake()
     {
         base.Awake();
+        SaveRefDimensions();
     }
 
     protected virtual void Update()
@@ -45,8 +47,6 @@ public class Projectile : DamagingObject
 
         lifetime -= Time.deltaTime;
         if (mortal && lifetime <= 0) DestroyObject();
-
-        if (spriteToScaleTo) AdjustScale();
     }
 
     #region AI Helper
@@ -109,18 +109,20 @@ public class Projectile : DamagingObject
         try
         {
             BoxCollider2D box = (BoxCollider2D)cldr;
-            box.size = new Vector2(w, h);
+            box.size = refDim * new Vector2(w, h);
         }
         catch
         {
             try
             {
                 CircleCollider2D circle = (CircleCollider2D)cldr;
-                circle.radius = w / 2;
+                circle.radius = refDim.x * w;
             }
             catch
-            { }
-        }               
+            {
+                Debug.Log("Invalid collider type.");
+            }
+        }
     }
 
     #endregion
@@ -132,6 +134,27 @@ public class Projectile : DamagingObject
         rb.velocity = transform.right * projSpeed;
 
         OnInit?.Invoke();
+    }
+
+    private void SaveRefDimensions()
+    {
+        try
+        {
+            BoxCollider2D box = (BoxCollider2D)cldr;
+            refDim = box.size;
+        }
+        catch
+        {
+            try
+            {
+                CircleCollider2D circle = (CircleCollider2D)cldr;
+                refDim = new Vector2(circle.radius, circle.radius);
+            }
+            catch
+            {
+                Debug.Log("Invalid collider type.");
+            }
+        }
     }
 
     private void OnContact(GameObject obj)

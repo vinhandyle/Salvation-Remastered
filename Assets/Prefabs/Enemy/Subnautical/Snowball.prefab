@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 75a04662f88337240b33cdda587e0dca, type: 3}
+  m_Sprite: {fileID: -1609045025, guid: 75a04662f88337240b33cdda587e0dca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 7871186940610888241}
   - component: {fileID: -881403375230383100}
   - component: {fileID: 1078277314607444465}
+  - component: {fileID: 6878870287954657930}
   m_Layer: 10
   m_Name: Snowball
   m_TagString: Untagged
@@ -272,12 +273,12 @@ MonoBehaviour:
   dmgMult: 1
   destroyOnHit: 0
   destroyOnCrossFire: 0
-  canKnockback: 0
-  knockbackAmt: 0
+  canKnockback: 1
+  knockbackAmt: 3
   targetTags:
   - Player
   - Arena Box
-  spriteToScaleTo: {fileID: 21300000, guid: 75a04662f88337240b33cdda587e0dca, type: 3}
+  spriteToScaleTo: {fileID: -1609045025, guid: 75a04662f88337240b33cdda587e0dca, type: 3}
   spriteRenderer: {fileID: 6837682966978297103}
   homing: 0
   mortal: 0
@@ -300,3 +301,23 @@ MonoBehaviour:
   numBounces: 5
   bounceDamp: 0
   bounceOffset: 0
+--- !u!95 &6878870287954657930
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7528935010955719002}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ff82c3e98acbb8c4ba7e90d6f32a5e2c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

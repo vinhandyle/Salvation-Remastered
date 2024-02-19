@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SubnauticalBoss : Enemy
 {
     private Rigidbody2D rb;
     private Animator anim;
+    private HealthManager hm;
+    private MovingObject movingObject;
 
     private enum Stage
     {
@@ -29,16 +32,21 @@ public class SubnauticalBoss : Enemy
     [SerializeField] private float phase2Threshold;
     private bool inPhase2;
 
-    [Header("Dive / Surface")]
+    [Header("Swim")]
     [SerializeField] private float swimSpeed;
-    [SerializeField] private float leapSpeed;
+    [SerializeField] private float swimRange;
+    [SerializeField] private int swimDir;
+    private Vector3 initPos;
+
+    [Header("Dive / Surface")]    
+    [SerializeField] private float surfaceSpeed;
+    [SerializeField] private float leapSpeed;   
     [SerializeField] private float surfaceDistance;
     [SerializeField] private float leapDistance;
     [SerializeField] private float diveTime;
     [SerializeField] private float surfaceTime;
     private float swimTimer;
-    private Vector3 initPos;
-    private bool isUnderwater;
+    private bool isUnderwater = true;
 
     [Header("Scatter Shot")]
     [SerializeField] private int ssBullets1;
@@ -63,16 +71,18 @@ public class SubnauticalBoss : Enemy
     [SerializeField] private float torpedoSpeed;
 
     [Header("Downpour")]
+    [SerializeField] private ProjectileSpawner dpSpawner;
     [SerializeField] private float dpFallSpeed;
     [SerializeField] private float dpDuration;
-    [SerializeField] private float dpTimer;
-    private float dpTime;
+    [SerializeField] private float dpCooldown;
+    private float dpTimer;
 
     protected override void Awake()
     {
         base.Awake();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        movingObject = GetComponent<MovingObject>();
 
         uninterruptable = new List<Stage>
         {
@@ -82,10 +92,12 @@ public class SubnauticalBoss : Enemy
         initPos = transform.position;
 
         // Death handlers
-        HealthManager hm = core.GetComponent<HealthManager>();
+        hm = core.GetComponent<HealthManager>();
+        hm.SetDamageMult(0.5f);
+
         hm.OnDying += () =>
         {
-            vcam.Priority += 2;
+            if (!PlayerData.Instance.fullCam) vcam.Priority += 2;
 
             stage = Stage.Start;
             rb.velocity = Vector2.zero;
@@ -93,7 +105,7 @@ public class SubnauticalBoss : Enemy
 
         hm.OnDeath += () =>
         {
-            vcam.Priority -= 2;
+            if (!PlayerData.Instance.fullCam) vcam.Priority -= 2;
 
             GameStateManager.Instance.UpdateState(GameStateManager.GameState.PAUSED);
             PlayerData.Instance.UpdateBestTime(SceneController.Instance.currentLevel + (PlayerData.Instance.expertMode ? "E" : ""), timer.timer);
@@ -114,13 +126,13 @@ public class SubnauticalBoss : Enemy
         }
 
         swimTimer += Time.deltaTime;
-        dpTime += Time.deltaTime;
+        dpTimer += Time.deltaTime;
 
         if (!debug && !uninterruptable.Contains(stage))
-        {           
+        {
             if ((isUnderwater && swimTimer >= surfaceTime) || (!isUnderwater && swimTimer >= diveTime))
             {
-                // Dive / Surface
+                // Dive / Surface / Leap
 
                 StopAllCoroutines(); // Prevent parallel routines
 
@@ -133,6 +145,13 @@ public class SubnauticalBoss : Enemy
             }
             else
             {
+                // Underwater Movement
+
+                if (isUnderwater && movingObject.stopped)
+                {
+                    Swim(swimDir *= -1);
+                }
+
                 // Phase 2 + Downpour
 
                 if (!inPhase2 && health.health <= health.maxHealth * phase2Threshold)
@@ -141,10 +160,13 @@ public class SubnauticalBoss : Enemy
                     StopAllCoroutines(); // Prevent parallel routines
                     StartCoroutine(Downpour());
                 }
-                else if (dpTimer == dpTime)
+                else if (dpTimer == dpCooldown)
                 {
                     StopAllCoroutines(); // Prevent parallel routines
-                    StartCoroutine(Downpour());
+                    dpTimer = 0;
+
+                    if (Random.Range(0,3) < 2)
+                        StartCoroutine(Downpour()); // 66%
                 }
             }
         }        
@@ -184,10 +206,16 @@ public class SubnauticalBoss : Enemy
         }
     }
 
+    private void Swim(int dir)
+    {
+        movingObject.Move(swimSpeed, new Vector2(initPos.x + dir * swimRange, initPos.y));
+    }
+
     private IEnumerator Rest()
     {
-        stage = Stage.Rest;
-        rb.velocity = Vector2.zero;
+        if (stage != Stage.Start)
+            movingObject.Resume();
+        stage = Stage.Rest;       
 
         // Repeat attack for debugging
         if (debug)
@@ -202,10 +230,12 @@ public class SubnauticalBoss : Enemy
 
         if (isUnderwater)
         {
+            movingObject.Stop();
+
             if (Random.Range(0, 2) == 0)
-                StartCoroutine(CrystalBarrage());
+                StartCoroutine(CrystalBarrage()); // 50%
             else
-                StartCoroutine(Torpedo());
+                StartCoroutine(Torpedo()); // 50%
         }
         else
         {
@@ -216,19 +246,48 @@ public class SubnauticalBoss : Enemy
     private IEnumerator Dive()
     {
         stage = Stage.Dive;
-        yield return null;
+
+        movingObject.Move(surfaceSpeed, new Vector2(transform.position.x, transform.position.y - surfaceDistance));
+        while (!movingObject.stopped)
+            yield return null;
+
+        swimTimer = 0;
+        isUnderwater = true;
+        hm.SetDamageMult(0.5f);
+        Swim(swimDir);
+        StartCoroutine(Rest());
     }
 
     private IEnumerator Surface()
     {
         stage = Stage.Surface;
-        yield return null;
+
+        movingObject.Move(surfaceSpeed, new Vector2(transform.position.x, transform.position.y + surfaceDistance));
+        while (!movingObject.stopped)
+            yield return null;
+
+        swimTimer = 0;
+        isUnderwater = false;
+        hm.SetDamageMult();
+        StartCoroutine(Rest());
     }
 
     private IEnumerator Leap()
     {
         stage = Stage.Leap;
-        yield return null;
+
+        movingObject.Move(leapSpeed, new Vector2(transform.position.x, transform.position.y + leapDistance));
+        while (!movingObject.stopped)
+            yield return null;
+
+        movingObject.Move(leapSpeed * 0.6f, new Vector2(transform.position.x, initPos.y + surfaceDistance));
+        while (!movingObject.stopped)
+            yield return null;
+
+        swimTimer = 0;
+        isUnderwater = false;
+        hm.SetDamageMult();
+        StartCoroutine(Rest());
     }
 
     private IEnumerator ScatterShot()
@@ -303,14 +362,18 @@ public class SubnauticalBoss : Enemy
     private IEnumerator Downpour()
     {
         stage = Stage.Downpour;
-        dpTime = 0;
+        dpTimer = 0;
 
         float _dpFallSpeed = dpFallSpeed;
         if (health.health <= health.maxHealth * phase2Threshold / 2)
-            _dpFallSpeed /= 2;
+            _dpFallSpeed *= 2;
+       
+        dpSpawner.SetProjectileSpeed(_dpFallSpeed);
+        dpSpawner.gameObject.SetActive(true);
 
-        yield return null;
+        yield return new WaitForSeconds(dpDuration);
 
+        dpSpawner.gameObject.SetActive(false);
         StartCoroutine(Rest());
     }
 }

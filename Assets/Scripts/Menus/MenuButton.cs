@@ -10,7 +10,7 @@ public class MenuButton : MonoBehaviour
 {
     [SerializeField] private bool levelOnly;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         if (levelOnly) gameObject.SetActive(SceneController.Instance.InLevel());
     }

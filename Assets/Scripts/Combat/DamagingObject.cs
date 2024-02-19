@@ -49,7 +49,7 @@ public class DamagingObject : MonoBehaviour
     /// </summary>
     private void OnContact(GameObject other)
     {
-        if (ValidTarget(other) || CanCrossFire(other))
+        if (ValidTarget(other))
         {
             health = other.GetComponent<HealthManager>();
             if (health != null) health.TakeDamage(Mathf.RoundToInt(damage * dmgMult));
@@ -67,24 +67,24 @@ public class DamagingObject : MonoBehaviour
             }
 
             // Destroy object if appropriate
-            if (!destroyed && ValidHit(other))
+            if (!destroyed && (destroyOnHit || destroyOnCrossFire))
                 DestroyObject();
         }
     }
 
     protected bool ValidTarget(GameObject obj)
     {
-        return targetTags.Count == 0 || targetTags.Contains(obj.tag);
-    }
+        bool crossFire = new int[] { 6, 7, 8, 9, 10 }.Contains(obj.layer);
 
-    protected bool ValidHit(GameObject obj)
-    {
-        return destroyOnHit || CanCrossFire(obj);
-    }
-
-    private bool CanCrossFire(GameObject obj)
-    {
-        return destroyOnCrossFire && new int[] { 6, 7, 8, 10 }.Contains(obj.layer);
+        if (targetTags.Count == 0)
+        {
+            if (!destroyOnCrossFire)
+                return new int[] { 6, 7, 9 }.Contains(obj.layer);
+            else
+                return crossFire;
+        }
+        else
+            return targetTags.Contains(obj.tag) || (destroyOnCrossFire && crossFire);
     }
 
     protected void DestroyObject()
@@ -106,10 +106,18 @@ public class DamagingObject : MonoBehaviour
     }
 
     /// <summary>
+    /// Disable the object's collider when the sprite is empty during the animation.
+    /// </summary>
+    protected void DisableHitboxPostAnim()
+    {
+        cldr.enabled = false;
+    }
+
+    /// <summary>
     /// Call to destroy object after collision animation finishes.
     /// </summary>
-    private void DestroyObjectPostAnim()
-    {
+    protected void DestroyObjectPostAnim()
+    {        
         OnDestroy?.Invoke();
         Destroy(gameObject);
     }

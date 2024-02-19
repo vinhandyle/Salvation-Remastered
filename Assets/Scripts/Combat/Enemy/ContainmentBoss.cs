@@ -68,7 +68,7 @@ public class ContainmentBoss : Enemy
         HealthManager hm = core.GetComponent<HealthManager>();
         hm.OnDying += () =>
         {
-            vcam.Priority += 2;
+            if (!PlayerData.Instance.fullCam) vcam.Priority += 2;
 
             stage = Stage.Start;
             rb.velocity = Vector2.zero;
@@ -76,7 +76,7 @@ public class ContainmentBoss : Enemy
 
         hm.OnDeath += () =>
         {
-            vcam.Priority -= 2;
+            if (!PlayerData.Instance.fullCam) vcam.Priority -= 2;
 
             GameStateManager.Instance.UpdateState(GameStateManager.GameState.PAUSED);
             PlayerData.Instance.UpdateBestTime(SceneController.Instance.currentLevel + (PlayerData.Instance.expertMode ? "E" : ""), timer.timer);

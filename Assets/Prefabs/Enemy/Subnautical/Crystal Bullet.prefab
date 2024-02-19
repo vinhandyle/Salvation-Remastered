@@ -9,8 +9,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 616809984904021009, guid: d26ed172cfd72bb4282d251d8cd0d020, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 616809984904021009, guid: d26ed172cfd72bb4282d251d8cd0d020, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 12b5e94036c4b524f95d60dd9f89581c, type: 2}
     - target: {fileID: 909813987362321706, guid: d26ed172cfd72bb4282d251d8cd0d020, type: 3}
       propertyPath: damage
       value: 2
@@ -18,7 +22,7 @@ PrefabInstance:
     - target: {fileID: 909813987362321706, guid: d26ed172cfd72bb4282d251d8cd0d020, type: 3}
       propertyPath: spriteToScaleTo
       value: 
-      objectReference: {fileID: 21300000, guid: 15de6d8145e2c7446bdee75e9690140d, type: 3}
+      objectReference: {fileID: -1798770365, guid: 15de6d8145e2c7446bdee75e9690140d, type: 3}
     - target: {fileID: 4830279004705719476, guid: d26ed172cfd72bb4282d251d8cd0d020, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -88,8 +92,12 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9122408200474687916, guid: d26ed172cfd72bb4282d251d8cd0d020, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9122408200474687916, guid: d26ed172cfd72bb4282d251d8cd0d020, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 15de6d8145e2c7446bdee75e9690140d, type: 3}
+      objectReference: {fileID: -1798770365, guid: 15de6d8145e2c7446bdee75e9690140d, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d26ed172cfd72bb4282d251d8cd0d020, type: 3}

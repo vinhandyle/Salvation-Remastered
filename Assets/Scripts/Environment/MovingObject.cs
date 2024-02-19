@@ -8,11 +8,14 @@ public class MovingObject : MonoBehaviour
 
     private Vector3 initPos;
     private Vector3 endPos;
+    private float speed;
+    public bool stopped { get; protected set; }
 
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         initPos = transform.position;
+        stopped = true;
     }
 
     protected virtual void Update()
@@ -22,6 +25,7 @@ public class MovingObject : MonoBehaviour
         {
             rb.velocity = Vector2.zero;
             transform.position = endPos;
+            stopped = true;
         }
     }
 
@@ -30,7 +34,9 @@ public class MovingObject : MonoBehaviour
     /// </summary>
     public void Move(float speed, Vector3 endPos)
     {
+        stopped = false;
         this.endPos = endPos;
+        this.speed = speed;
         rb.velocity = speed * (endPos - transform.position).normalized;
     }
 
@@ -39,7 +45,25 @@ public class MovingObject : MonoBehaviour
     /// </summary>
     public void Return(float speed)
     {
+        stopped = false;
         endPos = initPos;
         rb.velocity = speed * (initPos - transform.position).normalized;
     }
+
+    /// <summary>
+    /// Stop the object mid-travel.
+    /// </summary>
+    public void Stop()
+    {
+        stopped = true;
+        rb.velocity = Vector2.zero;
+    }
+
+    /// <summary>
+    /// Resume travel to the most recent endpoint.
+    /// </summary>
+    public void Resume()
+    {
+        Move(speed, endPos);
+    }    
 }

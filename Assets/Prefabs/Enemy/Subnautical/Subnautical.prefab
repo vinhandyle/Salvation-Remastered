@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2244499181220506378}
   - component: {fileID: 8569531348508713239}
   - component: {fileID: 8062070365427898528}
+  - component: {fileID: 8409757896740222646}
   m_Layer: 0
   m_Name: Subnautical
   m_TagString: Untagged
@@ -86,10 +87,13 @@ MonoBehaviour:
   health: {fileID: 0}
   core: {fileID: 2682387782943749065}
   phase2Threshold: 0.5
-  swimSpeed: 0
-  leapSpeed: 0
-  surfaceDistance: 0
-  leapDistance: 0
+  swimSpeed: 6
+  swimRange: 5
+  swimDir: 1
+  surfaceSpeed: 5
+  leapSpeed: 20
+  surfaceDistance: 3
+  leapDistance: 10
   diveTime: 8
   surfaceTime: 12
   ssBullets1: 3
@@ -113,9 +117,22 @@ MonoBehaviour:
   torpedoAmt2: 5
   torpedoFireRate: 0.5
   torpedoSpeed: 12
-  dpFallSpeed: 10
+  dpSpawner: {fileID: 0}
+  dpFallSpeed: 6
   dpDuration: 10
   dpTimer: 20
+--- !u!114 &8409757896740222646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2244499181220506379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6922d70750f4ae549b95f558ef1a4691, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2682387782943749065
 GameObject:
   m_ObjectHideFlags: 0

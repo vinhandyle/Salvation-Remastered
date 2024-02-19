@@ -7,6 +7,7 @@ public class PlayerData : Singleton<PlayerData>
     public float masterVolume;
     public float musicVolume;
     public float sfxVolume;
+    public bool fullCam;
 
     public Dictionary<string, float> bestTimes;
     public HashSet<string> noHits;
@@ -28,6 +29,7 @@ public class PlayerData : Singleton<PlayerData>
     protected override void Awake()
     {
         base.Awake();
+        fullCam = true;
 
         bestTimes = new Dictionary<string, float>();
         noHits = new HashSet<string>();
