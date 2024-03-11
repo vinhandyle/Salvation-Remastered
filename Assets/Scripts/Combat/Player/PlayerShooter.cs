@@ -1,3 +1,4 @@
+using LayerManager;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -265,7 +266,7 @@ public class PlayerShooter : MonoBehaviour
     private void RailgunShoot()
     {
         RaycastHit2D hit = Physics2D.RaycastAll(transform.position, shootPoint.rotation * shootPoint.localPosition, Mathf.Infinity)
-                                               .Where(hit => hit.collider.gameObject.layer == 6)
+                                               .Where(hit => hit.collider.gameObject.layer == (int)Layer.Terrain)
                                                .OrderBy(hit => hit.distance)
                                                .FirstOrDefault();
 
@@ -315,5 +316,25 @@ public class PlayerShooter : MonoBehaviour
                 recharging[i] = false;
             }
         }
+    }
+
+    /// <summary>
+    /// Drain the specified amount of energy from the player.
+    /// </summary>
+    /// <param name="amt"></param>
+    public void DrainEnergy(int amt, bool drainAll = false)
+    {
+        for (int i = 0; i < energyLeft.Count; ++i)
+        {
+            if (i == (int)mode || drainAll)
+            {
+                energyLeft[i] -= amt;
+                if (energyLeft[i] <= 0)
+                {
+                    recharging[i] = true;
+                    energyLeft[i] = 0;
+                }
+            }
+        }        
     }
 }

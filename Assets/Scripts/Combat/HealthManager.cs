@@ -12,15 +12,20 @@ public class HealthManager : MonoBehaviour
     private SpriteRenderer sprite;
 
     [SerializeField] private AudioSource audioSource;
-    [SerializeField] private HealthBar healthBar;
     [SerializeField] private GameObject rootObject;
     [SerializeField] private DeathExplosion deathExplosion;
     [SerializeField] private int maxHealth;
-    [SerializeField] private bool immune;
+    [SerializeField] private bool godMode;   
     private float dmgMult;
+    private bool immune;
+
+    [Header("Health Bar")]
+    [SerializeField] private HealthBar healthBar;
+    [SerializeField] private bool movingHealthBar;
 
     public bool noHit { get; private set; }
 
+    public event Action OnDamage;
     public event Action OnDying;
     public event Action OnDeath;
 
@@ -30,8 +35,30 @@ public class HealthManager : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         healthBar?.SetDefaults(maxHealth);
 
+        if (movingHealthBar)
+            healthBar.transform.parent = GameObject.Find("Canvas").transform;
+
         noHit = true;
+        immune = godMode;
         SetDamageMult();
+    }
+
+    private void Update()
+    {
+        // Set health bar to be just under the object's sprite
+        if (movingHealthBar)
+        {
+            RectTransform canvasRect = healthBar.transform.parent.GetComponent<RectTransform>();
+            Vector2 targetPosition = Camera.main.WorldToViewportPoint(
+                transform.position - new Vector3(0, sprite.size.y / 2, 0)
+            );
+
+            Vector2 screenPosition = new Vector2(
+                (targetPosition.x * canvasRect.sizeDelta.x) - (canvasRect.sizeDelta.x * 0.5f),
+                (targetPosition.y * canvasRect.sizeDelta.y) - (canvasRect.sizeDelta.y * 0.5f)
+            );
+            healthBar.GetComponent<RectTransform>().anchoredPosition = screenPosition;
+        }
     }
 
     /// <summary>
@@ -39,7 +66,7 @@ public class HealthManager : MonoBehaviour
     /// </summary>
     public void SetImmunity(bool i)
     {
-        immune = i;
+        immune = godMode || i;
     }
 
     public void SetDamageMult(float dmgMult = 1)
@@ -57,9 +84,13 @@ public class HealthManager : MonoBehaviour
             float dmg = amt * (CompareTag("Player") ? PlayerData.Instance.dmgMult : dmgMult);
             noHit = false;
 
-            if (dmg > 0) StartCoroutine(DamageEffect());
-            healthBar.health -= dmg;            
-            AudioController.Instance.PlayEffect(audioSource, 8);
+            if (dmg > 0)
+            {
+                StartCoroutine(DamageEffect());
+                healthBar.health -= dmg;
+                OnDamage?.Invoke();
+                AudioController.Instance.PlayEffect(audioSource, 8);
+            }
 
             if (healthBar.health <= 0)
             {
@@ -100,10 +131,14 @@ public class HealthManager : MonoBehaviour
     /// <summary>
     /// Restore health by a flat amount and/or percent.
     /// </summary>
-    public void Heal(int amt, float pct)
+    public void Heal(int amt, float pct = 0)
     {
         healthBar.health += amt;
         healthBar.health += healthBar.maxHealth * pct;
+
+        // Negative healing cannot kill
+        if (healthBar.health < 0)
+            healthBar.health = 1;
     }
 
     /// <summary>

@@ -109,7 +109,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 42
+        y: 63
         width: 14
         height: 21
       alignment: 0
@@ -130,7 +130,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 21
+        y: 42
         width: 14
         height: 21
       alignment: 0
@@ -151,7 +151,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 21
         width: 14
         height: 21
       alignment: 0
@@ -163,6 +163,27 @@ TextureImporter:
       bones: []
       spriteID: b28226afbf7820d41a5a34e48029589e
       internalID: 571624233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Subnautical_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 14
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62ed81de46e89e64bb8276daf20effce
+      internalID: -2083220790
       vertices: []
       indices: 
       edges: []
@@ -180,6 +201,7 @@ TextureImporter:
     nameFileIdTable:
       Subnautical_2: 571624233
       Subnautical_1: -241514813
+      Subnautical_3: -2083220790
       Subnautical_0: -2072642785
   spritePackingTag: 
   pSDRemoveMatte: 0

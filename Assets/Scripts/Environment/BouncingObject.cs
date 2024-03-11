@@ -1,3 +1,4 @@
+using LayerManager;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ public class BouncingObject : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 6)
+        if (collision.gameObject.layer == (int)Layer.Terrain)
         {
             if (Mathf.Abs(rb.velocity.x) < 0.25)
                 rb.velocity = new Vector2(0, rb.velocity.y);

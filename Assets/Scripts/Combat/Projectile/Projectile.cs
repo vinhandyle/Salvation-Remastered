@@ -1,3 +1,4 @@
+using LayerManager;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -166,24 +167,24 @@ public class Projectile : DamagingObject
                 OnPlayerHit?.Invoke(obj);
             }
 
-            switch (obj.layer)
+            switch ((Layer)obj.layer)
             {
-                case 6:
+                case Layer.Terrain:
                     // Center box is only used to catch small, fast projectiles
                     // Do this to prevent duplicate effect activations
                     if (obj.name != "Center")
                         OnTerrainHit?.Invoke(obj);
                     break;
 
-                case 8:
+                case Layer.PlayerAttack:
                     OnPlayerAttackHit?.Invoke(obj);
                     break;
 
-                case 9:
+                case Layer.Enemy:
                     OnEnemyHit?.Invoke(obj);
                     break;
 
-                case 10:
+                case Layer.EnemyAttack:
                     OnEnemyAttackHit?.Invoke(obj);
                     break;
             }

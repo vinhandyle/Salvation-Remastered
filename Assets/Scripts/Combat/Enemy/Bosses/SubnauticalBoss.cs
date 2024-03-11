@@ -369,11 +369,11 @@ public class SubnauticalBoss : Enemy
             _dpFallSpeed *= 2;
        
         dpSpawner.SetProjectileSpeed(_dpFallSpeed);
-        dpSpawner.gameObject.SetActive(true);
+        dpSpawner.Toggle();
 
         yield return new WaitForSeconds(dpDuration);
 
-        dpSpawner.gameObject.SetActive(false);
+        dpSpawner.Toggle();
         StartCoroutine(Rest());
     }
 }

@@ -26,6 +26,6 @@ public class PassThroughTerrain : MonoBehaviour
         // Platform is solid only when the bottom of the player
         // is above the top of the platform
         Vector2 playerRelPos = player.transform.position - playerBottom - boxSurface;
-        box.enabled = Vector2.Dot(playerRelPos, transform.up) > 0;
+        box.enabled = Vector2.Dot(playerRelPos - box.offset * transform.localScale, transform.up) > 0;
     }
 }

@@ -1,3 +1,4 @@
+using LayerManager;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// Allows an object to damage the player on contact.
+/// Allows an object to deal damage on contact.
 /// </summary>
 public class DamagingObject : MonoBehaviour
 {
@@ -74,12 +75,27 @@ public class DamagingObject : MonoBehaviour
 
     protected bool ValidTarget(GameObject obj)
     {
-        bool crossFire = new int[] { 6, 7, 8, 9, 10 }.Contains(obj.layer);
+        bool crossFire = new Layer[] 
+        { 
+            Layer.Terrain, 
+            Layer.Player, 
+            Layer.PlayerAttack, 
+            Layer.Enemy, 
+            Layer.EnemyAttack
+        }
+        .Contains((Layer)obj.layer);
 
         if (targetTags.Count == 0)
         {
             if (!destroyOnCrossFire)
-                return new int[] { 6, 7, 9 }.Contains(obj.layer);
+                return 
+                    new Layer[] 
+                    { 
+                        Layer.Terrain,
+                        Layer.Player, 
+                        Layer.Enemy
+                    }
+                    .Contains((Layer)obj.layer);
             else
                 return crossFire;
         }
