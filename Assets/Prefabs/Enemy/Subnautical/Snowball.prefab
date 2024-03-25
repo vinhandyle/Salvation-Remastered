@@ -284,6 +284,7 @@ MonoBehaviour:
   mortal: 0
   lifetime: 0
   fragment: {fileID: 4152270396060077558, guid: 5a68aa8fc67b9c9499dd72e8bddc6fbf, type: 3}
+  fragmentSfx: 20
 --- !u!114 &1078277314607444465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,7 +297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36f6015b675fef244be1200aec958603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundEffect: 7
+  soundEffect: 20
   staticBounce: 1
   numBounces: 5
   bounceDamp: 0

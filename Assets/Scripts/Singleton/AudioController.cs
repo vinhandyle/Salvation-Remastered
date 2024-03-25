@@ -1,3 +1,4 @@
+using AudioManager;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ public class AudioController : Singleton<AudioController>
     public void ChangeVolume(string channel, float volume)
     {
         mixer.SetFloat(channel, Mathf.Log10(volume + 0.0001f) * 20);
-    }
+    }    
 
     /// <summary>
     /// Get the volume of a specific audio channel.
@@ -34,11 +35,29 @@ public class AudioController : Singleton<AudioController>
     }
 
     /// <summary>
+    /// Pause all audio sources.
+    /// </summary>
+    public void Pause()
+    {
+        foreach (AudioSource src in FindObjectsOfType<AudioSource>())
+            src.Pause();
+    }
+
+    /// <summary>
+    /// Unpause all audio sources.
+    /// </summary>
+    public void Unpause()
+    {
+        foreach (AudioSource src in FindObjectsOfType<AudioSource>())
+            src.UnPause();
+    }
+
+    /// <summary>
     /// Play the specificed track from the playlist. Loop by default.
     /// </summary>
-    public void PlayTrack(int trackNum, bool loop = true)
+    public void PlayTrack(SoundTrack track, bool loop = true)
     {
-        musicSource.clip = playlist[trackNum];
+        musicSource.clip = playlist[(int)track];
         musicSource.loop = loop;
         musicSource.Stop();
         musicSource.Play();
@@ -47,24 +66,76 @@ public class AudioController : Singleton<AudioController>
     /// <summary>
     /// Play the specified sfx from the list. Don't loop by default.
     /// </summary>
-    public void PlayEffect(AudioSource audioSource, int effectNum, bool loop = false)
+    public void PlayEffect(AudioSource audioSource, SoundEffect effect, bool loop = false)
     {
-        PlayEffect(audioSource, sfxList[effectNum], loop);
+        PlayEffect(audioSource, sfxList[(int)effect], loop);
     }
 
     private void PlayEffect(AudioSource src, AudioClip clip, bool loop)
     {
-        src.clip = clip;
-        src.loop = loop;
-        src.Stop();
-        src.Play();
+        if (loop)
+        {
+            src.clip = clip;
+            src.loop = loop;
+            src.Stop();
+            src.Play();
+        }
+        else
+        {
+            src.PlayOneShot(clip);
+        }
     }
 
     /// <summary>
     /// Stop all currently playing sfx's.
     /// </summary>
-    public void ClearEffects()
+    public void ClearEffects(AudioSource src = null)
     {
-        FindObjectsOfType<AudioSource>().ToList().ForEach(src => src.Stop());
+        if (src != null)
+            src.Stop();
+        else
+            FindObjectsOfType<AudioSource>().ToList().ForEach(s => s.Stop());
+    }
+}
+
+namespace AudioManager
+{
+    public enum SoundTrack
+    {
+        Default
+    }
+
+    public enum SoundEffect
+    {
+        GunShot,
+        ShotgunShot,
+        SilencedGunShot,
+        EnergyGunShot,
+        GrenadeLaunch,
+        RocketLaunch,
+        WeaponSwap,
+        GrenadeBounce,
+        MetalHit,
+        LowDrone,
+        HighDrone,
+        GearShift,
+        MetalImpact,
+        SmallExplosion,
+        BigExplosion,
+        SynthSting,
+        Gust,
+        BrewingStorm,
+        Gale,
+        IceLaunch,
+        IceBounce,
+        IceShatter,
+        MetalLid,
+        StoneImpact,
+        QuietDrone,
+        MetalClick,
+        QuietSplash,
+        ModerateSplash,
+        LoudSplash,
+        BubblingLiquid
     }
 }

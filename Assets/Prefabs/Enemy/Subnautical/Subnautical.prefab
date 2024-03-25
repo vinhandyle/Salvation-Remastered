@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8569531348508713239}
   - component: {fileID: 8062070365427898528}
   - component: {fileID: 8409757896740222646}
-  - component: {fileID: 6969581014843479041}
   m_Layer: 0
   m_Name: Subnautical
   m_TagString: Untagged
@@ -72,6 +71,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ca7434714685b7478118314c7aefc93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyAudio: {fileID: 1059934018301051764}
+  deathSfx: 12
   vcam: {fileID: 0}
   timer: {fileID: 0}
   rotator: {fileID: 4922433042092194822}
@@ -91,18 +92,24 @@ MonoBehaviour:
   swimSpeed: 6
   swimRange: 5
   swimDir: 1
+  diveSfx: 26
+  surfaceSfx: 26
+  leapStartSfx: 28
+  leapEndSfx: 28
   surfaceSpeed: 5
   leapSpeed: 20
   surfaceDistance: 3
   leapDistance: 10
   diveTime: 8
   surfaceTime: 12
+  ssSfx: 19
   ssBullets1: 3
   ssBullets2: 5
   ssSpreadAngle: 30
   ssWaves: 4
   ssFireRate: 0.5
   ssBulletSpeed: 25
+  cbSfx: 19
   cbBullets1: 4
   cbBullets2: 7
   cbFireRates:
@@ -114,10 +121,12 @@ MonoBehaviour:
   - 10
   cbFragSpeed: 25
   cbNumFrags: 0400000008000000
+  torpedoSfx: 22
   torpedoAmt1: 3
   torpedoAmt2: 5
   torpedoFireRate: 0.5
   torpedoSpeed: 12
+  dpSfx: 17
   dpSpawner: {fileID: 0}
   dpFallSpeed: 6
   dpDuration: 10
@@ -134,102 +143,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6922d70750f4ae549b95f558ef1a4691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!82 &6969581014843479041
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2244499181220506379}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 5051696048492438704, guid: 5bf6b36b2ebfc5043afd52a611765e70, type: 2}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &2682387782943749065
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,11 +281,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1059934018301051764}
-  healthBar: {fileID: 0}
   rootObject: {fileID: 2244499181220506379}
   deathExplosion: {fileID: 5253239722048037486}
   maxHealth: 2000
-  immune: 0
+  healthBar: {fileID: 0}
+  movingHealthBar: 0
 --- !u!114 &1081496354982575082
 MonoBehaviour:
   m_ObjectHideFlags: 0

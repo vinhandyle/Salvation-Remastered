@@ -139,6 +139,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   cldr: {fileID: 0}
   damage: 75
+  dmgMult: 1
   destroyOnHit: 0
   destroyOnCrossFire: 0
   canKnockback: 0

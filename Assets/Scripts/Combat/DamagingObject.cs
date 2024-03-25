@@ -60,10 +60,10 @@ public class DamagingObject : MonoBehaviour
             {
                 PlayerController player = other.GetComponent<PlayerController>();
 
-                if (canKnockback)
+                if (canKnockback && !health.immune)
                 {
                     Vector2 kb = 100 * knockbackAmt * (other.transform.position - transform.position);
-                    StartCoroutine(player.Knockback(kb));
+                    player.KnockbackAsync(kb);
                 }
             }
 

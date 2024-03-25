@@ -3846,8 +3846,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1816504413}
     - target: {fileID: 3990498926642899453, guid: 1239cb8eefd0b994aa526160b9c94d97, type: 3}
+      propertyPath: deathSfx
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3990498926642899453, guid: 1239cb8eefd0b994aa526160b9c94d97, type: 3}
       propertyPath: debugStage
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5662584927796975536, guid: 1239cb8eefd0b994aa526160b9c94d97, type: 3}
       propertyPath: m_RootOrder

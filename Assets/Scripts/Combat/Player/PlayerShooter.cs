@@ -1,3 +1,4 @@
+using AudioManager;
 using LayerManager;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,15 +12,12 @@ using UnityEngine.UI;
 public class PlayerShooter : MonoBehaviour
 {
     private HealthManager health;
+    private AudioSource playerAudio;
 
     [SerializeField] private Camera cam;
     [SerializeField] private Texture2D reticle;
     [SerializeField] private Transform rotator;
     [SerializeField] private Transform shootPoint;
-
-    [SerializeField] private AudioSource shootAudio;
-    [SerializeField] private AudioSource miscAudio;
-
 
     [SerializeField] private List<GameObject> projectiles;
     [SerializeField] private List<float> projSpeeds;
@@ -69,6 +67,7 @@ public class PlayerShooter : MonoBehaviour
     private void Awake()
     {
         health = GetComponent<HealthManager>();
+        playerAudio = GetComponent<AudioSource>();
 
         Cursor.SetCursor(reticle, new Vector2(), CursorMode.Auto);
         useTimer = useTime;
@@ -97,11 +96,15 @@ public class PlayerShooter : MonoBehaviour
             useTimer -= Time.deltaTime;
             useTimeBar.SetValue(useTimer);
 
-            if (Input.GetMouseButton(0) && !recharging[i] && useTimer <= 0)
+            // Clicking around menus does not trigger weapon fire
+            if (FindObjectsOfType<TerminalMenu>().Length == 0)
             {
-                Shoot();
-                useTimer = useTime;
-                useTimeBar.SetDefaults(useTimer);
+                if (Input.GetMouseButton(0) && !recharging[i] && useTimer <= 0)
+                {
+                    Shoot();
+                    useTimer = useTime;
+                    useTimeBar.SetDefaults(useTimer);
+                }
             }
 
             Recharge();
@@ -154,7 +157,7 @@ public class PlayerShooter : MonoBehaviour
             {
                 mode = prevMode;
             }
-            AudioController.Instance.PlayEffect(miscAudio, 6);
+            AudioController.Instance.PlayEffect(playerAudio, SoundEffect.WeaponSwap);
         }
         // Scroll through equipped weapons
         else if (mouseScrollDelta != 0 && !Input.GetMouseButton(0))
@@ -174,7 +177,7 @@ public class PlayerShooter : MonoBehaviour
             useTimer = 0;
             mode = quickSelect[i];            
             PlayerData.Instance.currentEquipped = (int)mode;
-            AudioController.Instance.PlayEffect(miscAudio, 6);
+            AudioController.Instance.PlayEffect(playerAudio, SoundEffect.WeaponSwap);
         }
 
         currentWeaponDisplay.sprite = weaponSprites[(int)mode];
@@ -226,7 +229,9 @@ public class PlayerShooter : MonoBehaviour
                 break;
         }
 
-        energyLeft[m] -= energyCost[m];
+        if (!PlayerData.Instance.godMode[2])
+            energyLeft[m] -= energyCost[m];
+
         if (energyLeft[m] <= 0 && !recharging[m])
         {
             recharging[m] = true;
@@ -245,7 +250,7 @@ public class PlayerShooter : MonoBehaviour
     private void StandardShoot()
     {
         Shoot(0);
-        AudioController.Instance.PlayEffect(shootAudio, 0);
+        AudioController.Instance.PlayEffect(playerAudio, SoundEffect.GunShot);
     }
 
     private void ShotgunShoot()
@@ -254,13 +259,13 @@ public class PlayerShooter : MonoBehaviour
         {
             Shoot(1, Random.Range(-shotgunSpread, shotgunSpread));
         }
-        AudioController.Instance.PlayEffect(shootAudio, 1);
+        AudioController.Instance.PlayEffect(playerAudio, SoundEffect.ShotgunShot);
     }
 
     private void MinigunShoot()
     {
         Shoot(1, Random.Range(-minigunSpread, minigunSpread));
-        AudioController.Instance.PlayEffect(shootAudio, 2);
+        AudioController.Instance.PlayEffect(playerAudio, SoundEffect.SilencedGunShot);
     }
 
     private void RailgunShoot()
@@ -272,19 +277,19 @@ public class PlayerShooter : MonoBehaviour
 
         SolidBeam proj = Instantiate(projectiles[2]).GetComponent<SolidBeam>();
         proj.SetDefaults(transform.position, hit.point);
-        AudioController.Instance.PlayEffect(shootAudio, 3);
+        AudioController.Instance.PlayEffect(playerAudio, SoundEffect.EnergyGunShot);
     }
 
     private void GrenadeShoot()
     {
         Shoot(3);
-        AudioController.Instance.PlayEffect(shootAudio, 4);
+        AudioController.Instance.PlayEffect(playerAudio, SoundEffect.GrenadeLaunch);
     }
 
     private void RocketShoot()
     {
         Shoot(4);
-        AudioController.Instance.PlayEffect(shootAudio, 5);
+        AudioController.Instance.PlayEffect(playerAudio, SoundEffect.RocketLaunch);
     }
 
     private void HealShoot()
@@ -324,17 +329,21 @@ public class PlayerShooter : MonoBehaviour
     /// <param name="amt"></param>
     public void DrainEnergy(int amt, bool drainAll = false)
     {
-        for (int i = 0; i < energyLeft.Count; ++i)
+        if (!PlayerData.Instance.godMode[2])
         {
-            if (i == (int)mode || drainAll)
+
+            for (int i = 0; i < energyLeft.Count; ++i)
             {
-                energyLeft[i] -= amt;
-                if (energyLeft[i] <= 0)
+                if (i == (int)mode || drainAll)
                 {
-                    recharging[i] = true;
-                    energyLeft[i] = 0;
+                    energyLeft[i] -= amt;
+                    if (energyLeft[i] <= 0)
+                    {
+                        recharging[i] = true;
+                        energyLeft[i] = 0;
+                    }
                 }
             }
-        }        
+        }
     }
 }

@@ -1,9 +1,12 @@
+using AudioManager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ZoneTrap : TriggerZone
 {
+    private AudioSource audioSource;
+
     [SerializeField] private MovingObject mo;    
     [SerializeField] private float activationSpeed;
     [SerializeField] private float returnSpeed;
@@ -14,6 +17,7 @@ public class ZoneTrap : TriggerZone
     private bool active;
 
     [Header("Trap Activation Indicator")]
+    [SerializeField] private SoundEffect warningSfx;
     [SerializeField] private GameObject warning;
     [SerializeField] private float warningLength;
 
@@ -21,6 +25,11 @@ public class ZoneTrap : TriggerZone
     {
         this.timeToTrigger = timeToTrigger;
         this.duration = duration;
+    }
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -46,6 +55,7 @@ public class ZoneTrap : TriggerZone
 
                     if (timer >= timeToTrigger)
                     {
+                        timer = 0;
                         StartCoroutine(TriggerTrap());
                     }
                 }
@@ -63,8 +73,12 @@ public class ZoneTrap : TriggerZone
         if (warning != null)
         {
             warning.SetActive(true);
+            AudioController.Instance.PlayEffect(audioSource, warningSfx, true);
+
             yield return new WaitForSeconds(warningLength);
+
             warning.SetActive(false);
+            AudioController.Instance.ClearEffects(audioSource);
         }
 
         active = true;

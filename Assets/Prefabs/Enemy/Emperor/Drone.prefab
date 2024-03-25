@@ -239,7 +239,6 @@ MonoBehaviour:
   rootObject: {fileID: 8552363591788301771}
   deathExplosion: {fileID: 3387817992490687042}
   maxHealth: 200
-  godMode: 0
   healthBar: {fileID: 9119510538303787904}
   movingHealthBar: 1
 --- !u!114 &8552363591788301772
@@ -254,6 +253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79278d80b89e3cb4dbc7327b3d0298f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyAudio: {fileID: 8552363591788301774}
+  deathSfx: 12
   vcam: {fileID: 0}
   timer: {fileID: 0}
   rotator: {fileID: 8552363591564306634}
@@ -266,6 +267,7 @@ MonoBehaviour:
   orbitSpeed: 60
   minOrbitDistance: 2
   maxOrbitDistance: 4
+  attackSfx: 0
   bulletNum: 3
   fireRate: 0.3
   fireSpeed: 12

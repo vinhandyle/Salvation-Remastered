@@ -70,6 +70,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8dff608ff96df8489709f62df51b44b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyAudio: {fileID: 5324054653433210771}
+  deathSfx: 12
   vcam: {fileID: 0}
   timer: {fileID: 0}
   rotator: {fileID: 4037341584298642465}
@@ -88,17 +90,23 @@ MonoBehaviour:
   followSpeed: 2
   followFarSpeed: 4
   phase2SpeedMult: 1.5
+  blinkSfx: 16
   blinkDist: 2
   blinkTime1: 6
   blinkTime2: 3
   blinkRestTime: 1
+  crashSfx: 10
+  crashStartSfx: 9
+  crashLandSfx: 23
   hurtbox: {fileID: 8574917309930654886}
   crashSpeed: 10
   crashWarningTime: 1
+  explosionSfx: 1
   explosionWaves: 3
   explosionBullets: 8
   explosionBulletSpeed: 15
   explosionWaveDelay: 0.5
+  berserkStartSfx: 9
   berserkWaves: 3
   berserkWarningTime: 1
 --- !u!1 &1212105095652873228
@@ -345,11 +353,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 5324054653433210771}
-  healthBar: {fileID: 0}
   rootObject: {fileID: 70626611894899975}
   deathExplosion: {fileID: 8403933174931765551}
   maxHealth: 1800
-  immune: 0
+  healthBar: {fileID: 0}
+  movingHealthBar: 0
 --- !u!114 &8574917309930654886
 MonoBehaviour:
   m_ObjectHideFlags: 0

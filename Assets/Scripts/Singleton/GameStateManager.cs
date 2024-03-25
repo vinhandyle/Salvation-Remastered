@@ -32,9 +32,11 @@ public class GameStateManager : Singleton<GameStateManager>
         {
             case GameState.PAUSED:
                 Time.timeScale = 0;
+                AudioController.Instance.Pause();
                 break;
             default:
                 Time.timeScale = 1;
+                AudioController.Instance.Unpause();
                 break;
         }
     }

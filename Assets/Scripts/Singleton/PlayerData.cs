@@ -15,12 +15,15 @@ public class PlayerData : Singleton<PlayerData>
     public HashSet<string> challenges;
     public HashSet<string> expertChallenges;
 
+    [Header("Combat")]
+    public bool[] godMode;
     public int dmgMult;
     public bool expertMode;
     public bool canDash;
     public bool canWallJump;
     public bool canDoubleJump;
 
+    [Header("Equipment")]
     public int currentEquipped;
     public bool[] equipped;
     public bool[] unlocked;

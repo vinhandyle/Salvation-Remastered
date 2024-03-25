@@ -1,3 +1,4 @@
+using AudioManager;
 using LayerManager;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ public class Drone : Enemy
     [SerializeField] private float maxOrbitDistance;
 
     [Header("Drone Attack")]
+    [SerializeField] private SoundEffect attackSfx;
     [SerializeField] private int bulletNum;
     [SerializeField] private float fireRate;
     [SerializeField] private float fireSpeed;
@@ -29,6 +31,7 @@ public class Drone : Enemy
         hm.OnDying += () =>
         {
             rb.velocity = Vector2.zero;
+            PlayDeathSoundEffect();
             Destroy(this);
         };
 
@@ -64,6 +67,7 @@ public class Drone : Enemy
         for (int i = 0; i < bulletNum; ++i)
         {
             Shoot(0, fireSpeed);
+            PlaySoundEffect(attackSfx);
             yield return new WaitForSeconds(fireRate);
         }
        

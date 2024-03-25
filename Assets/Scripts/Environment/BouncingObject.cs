@@ -1,3 +1,4 @@
+using AudioManager;
 using LayerManager;
 using System;
 using System.Collections;
@@ -8,7 +9,7 @@ public class BouncingObject : MonoBehaviour
 {
     private Rigidbody2D rb;
     private AudioSource audioSource;
-    [SerializeField] private int soundEffect;
+    [SerializeField] private SoundEffect soundEffect;
 
     [Header("Bounce Info")]
     [SerializeField] private bool staticBounce;

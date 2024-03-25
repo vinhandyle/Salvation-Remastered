@@ -73,7 +73,7 @@ public class SaveManager : Singleton<SaveManager>
 
     /// <summary>
     /// Save game progress stored in the application onto the local disk.
-    /// Location: \AppData\LocalLow\DefaultCompany\gdim-31
+    /// Location: \AppData\LocalLow\DefaultCompany\Salvation Remastered
     /// </summary>
     private void SaveGameToDisk()
     {
@@ -97,7 +97,7 @@ public class SaveManager : Singleton<SaveManager>
 
     /// <summary>
     /// Reads save data from local disk and loads it into the application.
-    /// Location: \AppData\LocalLow\DefaultCompany\gdim-31
+    /// Location: \AppData\LocalLow\DefaultCompany\Salvation Remastered
     /// </summary>
     private void LoadGameFromDisk()
     {

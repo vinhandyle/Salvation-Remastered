@@ -283,7 +283,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 133765583}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5, y: 5.5, z: 5}
+  m_LocalPosition: {x: 5, y: 5.5, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -429,7 +429,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 250390712}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5, y: 10.5, z: 5}
+  m_LocalPosition: {x: 5, y: 10.5, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4359,6 +4359,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 484097702}
     m_Modifications:
+    - target: {fileID: 6002770869878867720, guid: 8fd7a4926e7d45842b58b739c37c42f6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7271038274701877377, guid: 8fd7a4926e7d45842b58b739c37c42f6, type: 3}
       propertyPath: healthBar
       value: 
@@ -4389,7 +4393,7 @@ PrefabInstance:
       objectReference: {fileID: 407145377}
     - target: {fileID: 7271038275145091008, guid: 8fd7a4926e7d45842b58b739c37c42f6, type: 3}
       propertyPath: debugStage
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7271038275145091008, guid: 8fd7a4926e7d45842b58b739c37c42f6, type: 3}
       propertyPath: scorchedEarth

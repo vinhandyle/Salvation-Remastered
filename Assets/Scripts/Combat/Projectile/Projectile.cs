@@ -20,7 +20,8 @@ public class Projectile : DamagingObject
     [SerializeField] protected bool homing;
     [SerializeField] protected bool mortal;
     [SerializeField] protected float lifetime;
-    
+    protected AudioSource projAudio;
+
     protected Transform origin;
     protected event Action OnInit;
 
@@ -34,8 +35,9 @@ public class Projectile : DamagingObject
 
     protected override void Awake()
     {
-        base.Awake();
+        base.Awake();        
         SaveRefDimensions();
+        projAudio = GetComponent<AudioSource>();
     }
 
     protected virtual void Update()

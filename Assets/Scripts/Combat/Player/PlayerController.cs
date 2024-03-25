@@ -1,3 +1,4 @@
+using AudioManager;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,14 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
     private HealthManager health;
+    private AudioSource playerAudio;
 
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
     [HideInInspector] public float moveSpeedMult = 1;
     private int direction;
 
+    [SerializeField] private SoundEffect jumpSfx;
     [SerializeField] private float fallMultiplier;
     [HideInInspector] public float fallMultiplierBoost = 1;
     [SerializeField] private float terminalVelocity;
@@ -25,7 +28,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float jumpHeightMult = 1;
     [SerializeField] private int coyoteTime;
     private bool coyoteWalking;
-    private bool canJumpMidair;
+    public bool canJumpMidair { get; private set; }
 
     [SerializeField] private float slidingSpeed;
     public bool sliding { get; private set; }
@@ -36,13 +39,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float wallJumpTime;
     public bool wallJumping { get; private set; }
 
+    [SerializeField] private SoundEffect dashSfx;
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashLength;
     [HideInInspector] public float dashSpeedMult = 1;
     private float dashTimer;
     [SerializeField] private float dashCd;
     [SerializeField] private bool dashImmunity;
-    private bool canDash;
+    public bool canDash { get; private set; }
     public bool dashing { get; private set; }
 
     [Header("Ground & Wall Detection")]
@@ -54,10 +58,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private List<Transform> wallChecks;
     [SerializeField] private bool tiltWithGround;
     [SerializeField] private float maxGroundTilt;
-    private bool onGround;
-    private bool onWall;
+    public bool onGround { get; private set; }
+    public bool onWall { get; private set; }
 
     [Header("Combat")]
+    [SerializeField] private SpriteRenderer stunIndicator;
     [SerializeField] private float stunTime;
     private bool stunned;
 
@@ -65,6 +70,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         health = GetComponent<HealthManager>();
+        playerAudio = GetComponent<AudioSource>();
         direction = (int)transform.right.x;
         canDash = true;
     }
@@ -256,6 +262,7 @@ public class PlayerController : MonoBehaviour
             // Wall jump
             if (sliding)
             {
+                AudioController.Instance.PlayEffect(playerAudio, jumpSfx);
                 rb.velocity = new Vector2(-direction * wallJumpWidth * moveSpeed * moveSpeedMult, wallJumpHeight * wallJumpMult);
                 FlipX();
                 StartCoroutine(WallJumpTimer());
@@ -263,6 +270,7 @@ public class PlayerController : MonoBehaviour
             // Normal jump
             else if (onGround || canJumpMidair)
             {
+                AudioController.Instance.PlayEffect(playerAudio, jumpSfx);
                 rb.velocity = new Vector2(rb.velocity.x, jumpHeight * jumpHeightMult);
                 if (!onGround) canJumpMidair = false;
             }
@@ -274,6 +282,7 @@ public class PlayerController : MonoBehaviour
         // Hold jump
         if (Input.GetKey(KeyCode.Space) && onGround)
         {
+            AudioController.Instance.PlayEffect(playerAudio, jumpSfx);
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight * jumpHeightMult);
             CheckCoyoteTime();
         }
@@ -295,6 +304,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (dashImmunity) health.SetImmunity(true);
 
+                AudioController.Instance.PlayEffect(playerAudio, dashSfx);
                 SetHorizontalVelocity(direction, dashSpeed * dashSpeedMult, dashSpeed * dashSpeedMult * direction * Vector2.right);
                 dashTimer = dashLength;
                 dashing = true;               
@@ -343,17 +353,26 @@ public class PlayerController : MonoBehaviour
     #region External
 
     /// <summary>
+    /// Start the knockback coroutine on the player object
+    /// so that it isn't affected by the origin object's state
+    /// </summary>
+    public void KnockbackAsync(Vector2 kb)
+    {
+        StartCoroutine(Knockback(kb));
+    }
+
+    /// <summary>
     /// Knockback the player by the specified force.
     /// Player is stunned during knockback to prevent momentum cancel.
     /// </summary>
-    public IEnumerator Knockback(Vector2 kb)
+    private IEnumerator Knockback(Vector2 kb)
     {
-        stunned = true;
+        stunIndicator.enabled = stunned = true;
         rb.AddForce(kb);
 
         yield return new WaitForSeconds(stunTime);
 
-        stunned = false;
+        stunIndicator.enabled = stunned = false;
     }
 
     #endregion

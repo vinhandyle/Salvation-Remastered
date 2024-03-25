@@ -1,3 +1,4 @@
+using AudioManager;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,9 +16,9 @@ public class HealthManager : MonoBehaviour
     [SerializeField] private GameObject rootObject;
     [SerializeField] private DeathExplosion deathExplosion;
     [SerializeField] private int maxHealth;
-    [SerializeField] private bool godMode;   
     private float dmgMult;
-    private bool immune;
+
+    public bool immune { get; private set; }
 
     [Header("Health Bar")]
     [SerializeField] private HealthBar healthBar;
@@ -39,7 +40,7 @@ public class HealthManager : MonoBehaviour
             healthBar.transform.parent = GameObject.Find("Canvas").transform;
 
         noHit = true;
-        immune = godMode;
+        immune = gameObject.CompareTag("Player") && PlayerData.Instance.godMode[0];
         SetDamageMult();
     }
 
@@ -66,12 +67,12 @@ public class HealthManager : MonoBehaviour
     /// </summary>
     public void SetImmunity(bool i)
     {
-        immune = godMode || i;
+        immune = PlayerData.Instance.godMode[0] || i;
     }
 
     public void SetDamageMult(float dmgMult = 1)
     {
-        this.dmgMult = dmgMult;
+        this.dmgMult = PlayerData.Instance.godMode[1] ? 1000 : dmgMult;
     }
 
     /// <summary>
@@ -89,7 +90,7 @@ public class HealthManager : MonoBehaviour
                 StartCoroutine(DamageEffect());
                 healthBar.health -= dmg;
                 OnDamage?.Invoke();
-                AudioController.Instance.PlayEffect(audioSource, 8);
+                AudioController.Instance.PlayEffect(audioSource, SoundEffect.MetalHit);
             }
 
             if (healthBar.health <= 0)
@@ -133,6 +134,10 @@ public class HealthManager : MonoBehaviour
     /// </summary>
     public void Heal(int amt, float pct = 0)
     {
+        // Prevent negative healing in god mode
+        if (PlayerData.Instance.godMode[0] && amt < 0)
+            amt = 0;
+
         healthBar.health += amt;
         healthBar.health += healthBar.maxHealth * pct;
 

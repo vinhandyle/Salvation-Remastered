@@ -1,3 +1,4 @@
+using AudioManager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,11 +44,13 @@ public class EmperorBoss : Enemy
     private int summonTokens;
 
     [Header("Cannon Fire")]
+    [SerializeField] private SoundEffect cfSfx;
     [SerializeField] private float cfFireSpeed;
     [SerializeField] private float cfFireRate;
     [SerializeField] private int cfBullets;
 
     [Header("Gale")]
+    [SerializeField] private SoundEffect galeSfx;
     [SerializeField] private List<ProjectileSpawner> galeSpawners;
     [SerializeField] private float galeTravelSpeed;
     [SerializeField] private float galeDuration;
@@ -56,6 +59,8 @@ public class EmperorBoss : Enemy
     [SerializeField] private GameObject jmWarning;
     [SerializeField] private GameObject jmDeathZone;    
     [SerializeField] private GameObject jmSafeZone;
+    [SerializeField] private SoundEffect jmSfx;
+    [SerializeField] private SoundEffect jmWarningSfx;
     [SerializeField] private List<BoxCollider2D> jmSafeZoneBounds;
     [SerializeField] private float jmChannelTime;
     [SerializeField] private float jmDuration;
@@ -73,15 +78,29 @@ public class EmperorBoss : Enemy
             if (!PlayerData.Instance.fullCam) vcam.Priority += 2;
 
             activeSummons.ForEach(s => s.GetComponent<HealthManager>().TakeDamage(int.MaxValue));
+            galeSpawners.ForEach(s => s.Clear());
+
+            ClearSoundEffects();
+            PlayDeathSoundEffect();
         };
 
         hm.OnDeath += () =>
         {
+            GameStateManager.Instance.UpdateState(GameStateManager.GameState.PAUSED);
+
             if (!PlayerData.Instance.fullCam) vcam.Priority -= 2;
 
-            GameStateManager.Instance.UpdateState(GameStateManager.GameState.PAUSED);
-            PlayerData.Instance.UpdateBestTime(SceneController.Instance.currentLevel + (PlayerData.Instance.expertMode ? "E" : ""), timer.timer);
-            SceneController.Instance.LoadScene("Win", false);
+            if (BossGauntlet.Instance.inGauntlet)
+            {
+                FindObjectOfType<GauntletMenu>().SetActive(true);
+                BossGauntlet.Instance.AddToTimer(timer.timer);
+                BossGauntlet.Instance.UpdateNoHit(player.GetComponent<HealthManager>().noHit);
+            }
+            else
+            {
+                PlayerData.Instance.UpdateBestTime(SceneController.Instance.currentLevel + (PlayerData.Instance.expertMode ? "E" : ""), timer.timer);
+                SceneController.Instance.LoadScene("Win", false);
+            }
         };
         
         hm.OnDamage += () =>
@@ -217,6 +236,7 @@ public class EmperorBoss : Enemy
         {
             Aim(player.transform.position);
             Shoot(rand, cfFireSpeed);
+            PlaySoundEffect(cfSfx);
             yield return new WaitForSeconds(_cfFireRate);
         }
 
@@ -232,6 +252,7 @@ public class EmperorBoss : Enemy
             gs.SetProjectileSpeed(galeTravelSpeed);
             gs.Toggle();
         }
+        PlaySoundEffect(galeSfx);
 
         yield return new WaitForSeconds(galeDuration);
 
@@ -253,12 +274,15 @@ public class EmperorBoss : Enemy
         );
 
         jmSafeZone.SetActive(true);
-        jmWarning.SetActive(true);        
+        jmWarning.SetActive(true);
+        PlaySoundEffect(jmWarningSfx, true);
 
         yield return new WaitForSeconds(jmChannelTime);
 
         jmDeathZone.SetActive(true);
-        jmWarning.SetActive(false);     
+        jmWarning.SetActive(false);
+        ClearSoundEffects();
+        PlaySoundEffect(jmSfx);
 
         // Reduce player's health to 1 and drain all weapons of energy
         if (!jmSafeZone.GetComponent<TriggerZone>().playerInRange)

@@ -1,3 +1,4 @@
+using AudioManager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,8 @@ public class OverseerBoss : Enemy
         RampingFire,
         ExplodingShot,
         ScorchedEarth,
-        ChargeBeam
+        ChargeBeam,
+        Death
     }
     [SerializeField] private Stage stage;
     [SerializeField] private Stage debugStage;
@@ -28,6 +30,7 @@ public class OverseerBoss : Enemy
     private bool inPhase2;
 
     [Header("Gear Shift")]
+    [SerializeField] private SoundEffect gearShiftSfx;
     [SerializeField] private float gearShiftSpeed;
     [SerializeField] private float gearShiftTime1;
     [SerializeField] private float gearShiftTime2;
@@ -36,12 +39,14 @@ public class OverseerBoss : Enemy
     private bool topGear;
 
     [Header("Ramping Fire")]
+    [SerializeField] private SoundEffect rpSfx;
     [SerializeField] private float rpFireSpeed;
     [SerializeField] private float rpFireRate;
     [SerializeField] private float rpFireRateInc;
     [SerializeField] private int rpBullets;
 
     [Header("Exploding Shot")]
+    [SerializeField] private SoundEffect esSfx;
     [SerializeField] private float esFireSpeed;
     [SerializeField] private float esFragSpeed;
     [SerializeField] private int esFrags;
@@ -49,15 +54,18 @@ public class OverseerBoss : Enemy
     [Header("Scorched Earth")]
     [SerializeField] private MovingObject scorchedEarth;
     [SerializeField] private GameObject seWarning;
+    [SerializeField] private SoundEffect seWarningSfx;
     [SerializeField] private float seWarningTime;
     [SerializeField] private float seDuration;
     [SerializeField] private float seDeferTime;
     [SerializeField] private float seTravelSpeed;
     private bool seActive;
 
-    [Header("Charge Beam")]
+    [Header("Charge Beam")]    
     [SerializeField] private GameObject chargeBeam;
     [SerializeField] private GameObject cbWarning;
+    [SerializeField] private SoundEffect cbSfx;
+    [SerializeField] private SoundEffect cbWarningSfx;
     [SerializeField] private float cbWarningTime;
     [SerializeField] private float cbDuration;
 
@@ -69,7 +77,7 @@ public class OverseerBoss : Enemy
 
         uninterruptable = new List<Stage> 
         { 
-            Stage.GearShift, Stage.RampingFire, Stage.ChargeBeam 
+            Stage.GearShift, Stage.RampingFire, Stage.ChargeBeam, Stage.Death 
         };
         initPos = transform.position;
 
@@ -78,20 +86,35 @@ public class OverseerBoss : Enemy
         hm.OnDying += () => 
         { 
             if (!PlayerData.Instance.fullCam) vcam.Priority += 2;
-            
+
+            stage = Stage.Death;
+
             scorchedEarth.gameObject.SetActive(false);
             seWarning.SetActive(false);            
             chargeBeam.SetActive(false);
             cbWarning.SetActive(false);
+
+            ClearSoundEffects();
+            PlayDeathSoundEffect();
         };
 
         hm.OnDeath += () => 
         {
-            if (!PlayerData.Instance.fullCam) vcam.Priority -= 2;
-           
             GameStateManager.Instance.UpdateState(GameStateManager.GameState.PAUSED);
-            PlayerData.Instance.UpdateBestTime(SceneController.Instance.currentLevel + (PlayerData.Instance.expertMode ? "E" : ""), timer.timer);
-            SceneController.Instance.LoadScene("Win", false);           
+
+            if (!PlayerData.Instance.fullCam) vcam.Priority -= 2;            
+
+            if (BossGauntlet.Instance.inGauntlet)
+            {
+                FindObjectOfType<GauntletMenu>().SetActive(true);
+                BossGauntlet.Instance.AddToTimer(timer.timer);
+                BossGauntlet.Instance.UpdateNoHit(player.GetComponent<HealthManager>().noHit);
+            }
+            else
+            {                
+                PlayerData.Instance.UpdateBestTime(SceneController.Instance.currentLevel + (PlayerData.Instance.expertMode ? "E" : ""), timer.timer);
+                SceneController.Instance.LoadScene("Win", false);
+            }
         };        
 
         // Opening move
@@ -113,12 +136,15 @@ public class OverseerBoss : Enemy
         // Gear Shift logic (independent of main AI)
         gearShiftTimer += Time.deltaTime;
 
-        if (!debug && !uninterruptable.Contains(stage) &&
-            ((!inPhase2 && gearShiftTimer >= gearShiftTime1) ||
-            (inPhase2 && gearShiftTimer >= gearShiftTime2)))
+        if (!seActive)
         {
-            StopAllCoroutines(); // Prevent parallel routines
-            StartCoroutine(GearShift());
+            if (!debug && !uninterruptable.Contains(stage) &&
+                ((!inPhase2 && gearShiftTimer >= gearShiftTime1) ||
+                (inPhase2 && gearShiftTimer >= gearShiftTime2)))
+            {
+                StopAllCoroutines(); // Prevent parallel routines (breaks Scorched Earth)
+                StartCoroutine(GearShift());
+            }
         }
     }
 
@@ -207,6 +233,7 @@ public class OverseerBoss : Enemy
         stage = Stage.GearShift;
 
         // Set shift direction
+        PlaySoundEffect(gearShiftSfx, true);
         if (transform.position.y <= initPos.y)
             rb.velocity = gearShiftSpeed * Vector2.up;
         else
@@ -232,6 +259,7 @@ public class OverseerBoss : Enemy
         rb.velocity = Vector2.zero;
         gearShiftTimer = 0;
         topGear = !topGear;
+        ClearSoundEffects();
         StartCoroutine(Rest());
     }
 
@@ -244,6 +272,7 @@ public class OverseerBoss : Enemy
         {
             Aim(player.transform.position);
             Shoot(0, rpFireSpeed);
+            PlaySoundEffect(rpSfx);
             yield return new WaitForSeconds(_rpFireRate);
             _rpFireRate *= 1 - rpFireRateInc;
         }
@@ -258,6 +287,7 @@ public class OverseerBoss : Enemy
         Aim(player.transform.position);
         FragProjectile proj = Shoot(1, esFireSpeed).GetComponent<FragProjectile>();
         proj.SetDefaults(esFrags, esFragSpeed);
+        PlaySoundEffect(esSfx);
 
         yield return null;
         StartCoroutine(Rest());
@@ -284,11 +314,13 @@ public class OverseerBoss : Enemy
             // Warning
             seActive = true;
             seWarning.SetActive(true);
+            PlaySoundEffect(seWarningSfx, true);
 
             yield return new WaitForSeconds(seWarningTime);
 
             // Initiate
-            seWarning.SetActive(false);
+            ClearSoundEffects();
+            seWarning.SetActive(false);            
 
             Vector3 seInitPos = scorchedEarth.transform.position;
             float dist = scorchedEarth.GetComponent<BoxCollider2D>().size.y * 0.75f;
@@ -313,6 +345,7 @@ public class OverseerBoss : Enemy
         // Warning
         anim.SetTrigger("Charge");
         cbWarning.SetActive(true);
+        PlaySoundEffect(cbWarningSfx, true);
 
         yield return new WaitForSeconds(cbWarningTime);
 
@@ -320,12 +353,14 @@ public class OverseerBoss : Enemy
         anim.SetTrigger("Beam");
         cbWarning.SetActive(false);
         chargeBeam.SetActive(true);
+        PlaySoundEffect(cbSfx, true);
 
         yield return new WaitForSeconds(cbDuration);
 
         // Clean up
         chargeBeam.SetActive(false);
         anim.SetTrigger("Rest");
+        ClearSoundEffects();
         StartCoroutine(Rest());
     }
 }

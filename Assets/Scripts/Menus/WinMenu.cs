@@ -7,7 +7,12 @@ public class WinMenu : MonoBehaviour
 {
     [SerializeField] private List<Image> imgs;
 
-    private void Awake()
+    protected virtual void Awake()
+    {
+        DisplaySpecialRanks();
+    }
+
+    protected void DisplaySpecialRanks()
     {
         AchievementManager am = FindObjectOfType<AchievementManager>();
         List<int> ranks = am.SpecialRanksAchieved();

@@ -1,3 +1,4 @@
+using AudioManager;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,8 @@ public class SubnauticalBoss : Enemy
         ScatterShot,
         CrystalBarrage,
         Torpedo,
-        Downpour
+        Downpour,
+        Death
     }
     [SerializeField] private Stage stage;
     [SerializeField] private Stage debugStage;
@@ -38,7 +40,11 @@ public class SubnauticalBoss : Enemy
     [SerializeField] private int swimDir;
     private Vector3 initPos;
 
-    [Header("Dive / Surface")]    
+    [Header("Dive / Surface")]
+    [SerializeField] private SoundEffect diveSfx;
+    [SerializeField] private SoundEffect surfaceSfx;
+    [SerializeField] private SoundEffect leapStartSfx;
+    [SerializeField] private SoundEffect leapEndSfx;
     [SerializeField] private float surfaceSpeed;
     [SerializeField] private float leapSpeed;   
     [SerializeField] private float surfaceDistance;
@@ -49,14 +55,16 @@ public class SubnauticalBoss : Enemy
     private bool isUnderwater = true;
 
     [Header("Scatter Shot")]
+    [SerializeField] private SoundEffect ssSfx;
     [SerializeField] private int ssBullets1;
     [SerializeField] private int ssBullets2;    
     [SerializeField] private int ssSpreadAngle;
     [SerializeField] private int ssWaves;
     [SerializeField] private float ssFireRate;
-    [SerializeField] private float ssBulletSpeed;    
+    [SerializeField] private float ssBulletSpeed;
 
     [Header("Crystal Barrage")]
+    [SerializeField] private SoundEffect cbSfx;
     [SerializeField] private int cbBullets1;
     [SerializeField] private int cbBullets2;    
     [SerializeField] private List<float> cbFireRates;
@@ -65,12 +73,14 @@ public class SubnauticalBoss : Enemy
     [SerializeField] private List<int> cbNumFrags;
 
     [Header("Torpedo")]
+    [SerializeField] private SoundEffect torpedoSfx;
     [SerializeField] private int torpedoAmt1;
     [SerializeField] private int torpedoAmt2;
     [SerializeField] private float torpedoFireRate;
     [SerializeField] private float torpedoSpeed;
 
     [Header("Downpour")]
+    [SerializeField] private SoundEffect dpSfx;
     [SerializeField] private ProjectileSpawner dpSpawner;
     [SerializeField] private float dpFallSpeed;
     [SerializeField] private float dpDuration;
@@ -88,6 +98,7 @@ public class SubnauticalBoss : Enemy
         {
             Stage.Dive, Stage.Surface, Stage.Leap, Stage.Downpour,
             Stage.ScatterShot, Stage.CrystalBarrage, Stage.Torpedo,
+            Stage.Death
         };
         initPos = transform.position;
 
@@ -99,17 +110,30 @@ public class SubnauticalBoss : Enemy
         {
             if (!PlayerData.Instance.fullCam) vcam.Priority += 2;
 
-            stage = Stage.Start;
+            stage = Stage.Death;
             rb.velocity = Vector2.zero;
+
+            ClearSoundEffects();
+            PlayDeathSoundEffect();
         };
 
         hm.OnDeath += () =>
         {
+            GameStateManager.Instance.UpdateState(GameStateManager.GameState.PAUSED);
+
             if (!PlayerData.Instance.fullCam) vcam.Priority -= 2;
 
-            GameStateManager.Instance.UpdateState(GameStateManager.GameState.PAUSED);
-            PlayerData.Instance.UpdateBestTime(SceneController.Instance.currentLevel + (PlayerData.Instance.expertMode ? "E" : ""), timer.timer);
-            SceneController.Instance.LoadScene("Win", false);
+            if (BossGauntlet.Instance.inGauntlet)
+            {
+                FindObjectOfType<GauntletMenu>().SetActive(true);
+                BossGauntlet.Instance.AddToTimer(timer.timer);
+                BossGauntlet.Instance.UpdateNoHit(player.GetComponent<HealthManager>().noHit);
+            }
+            else
+            {
+                PlayerData.Instance.UpdateBestTime(SceneController.Instance.currentLevel + (PlayerData.Instance.expertMode ? "E" : ""), timer.timer);
+                SceneController.Instance.LoadScene("Win", false);
+            }
         };
 
         // Opening move
@@ -247,6 +271,7 @@ public class SubnauticalBoss : Enemy
     {
         stage = Stage.Dive;
 
+        PlaySoundEffect(diveSfx);
         movingObject.Move(surfaceSpeed, new Vector2(transform.position.x, transform.position.y - surfaceDistance));
         while (!movingObject.stopped)
             yield return null;
@@ -262,6 +287,7 @@ public class SubnauticalBoss : Enemy
     {
         stage = Stage.Surface;
 
+        PlaySoundEffect(surfaceSfx);
         movingObject.Move(surfaceSpeed, new Vector2(transform.position.x, transform.position.y + surfaceDistance));
         while (!movingObject.stopped)
             yield return null;
@@ -276,6 +302,7 @@ public class SubnauticalBoss : Enemy
     {
         stage = Stage.Leap;
 
+        PlaySoundEffect(leapStartSfx);
         movingObject.Move(leapSpeed, new Vector2(transform.position.x, transform.position.y + leapDistance));
         while (!movingObject.stopped)
             yield return null;
@@ -284,6 +311,7 @@ public class SubnauticalBoss : Enemy
         while (!movingObject.stopped)
             yield return null;
 
+        PlaySoundEffect(leapEndSfx);
         swimTimer = 0;
         isUnderwater = false;
         hm.SetDamageMult();
@@ -300,6 +328,7 @@ public class SubnauticalBoss : Enemy
         for (int i = 0; i < ssWaves; ++i)
         {
             Aim(player.transform.position);
+            PlaySoundEffect(ssSfx);
 
             for (int j = 0; j < bullets; ++j)
             {
@@ -320,6 +349,7 @@ public class SubnauticalBoss : Enemy
         for (int i = 0; i < bullets; ++i)
         {
             Aim(player.transform.position);
+            PlaySoundEffect(cbSfx);
 
             // Snowball
             if (i == cbBullets1 - 1 || i == cbBullets2 - 1)
@@ -353,6 +383,7 @@ public class SubnauticalBoss : Enemy
         {
             Aim(transform.position);
             Shoot(3, torpedoSpeed);
+            PlaySoundEffect(torpedoSfx);
             yield return new WaitForSeconds(torpedoFireRate);
         }
 
@@ -370,10 +401,12 @@ public class SubnauticalBoss : Enemy
        
         dpSpawner.SetProjectileSpeed(_dpFallSpeed);
         dpSpawner.Toggle();
+        PlaySoundEffect(dpSfx, true);
 
         yield return new WaitForSeconds(dpDuration);
 
         dpSpawner.Toggle();
+        ClearSoundEffects();
         StartCoroutine(Rest());
     }
 }

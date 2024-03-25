@@ -1,10 +1,12 @@
+using AudioManager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class FragProjectile : Projectile
 {   
-    [SerializeField] private GameObject fragment;
+    [SerializeField] protected GameObject fragment;
+    [SerializeField] private SoundEffect fragmentSfx;
     private int numFrags;
     private float fragSpeed;
 
@@ -28,6 +30,7 @@ public class FragProjectile : Projectile
     {
         if (targetTags.Contains(obj.tag))
         {
+            AudioController.Instance.PlayEffect(projAudio, fragmentSfx);
             Fragment();
         }
     }

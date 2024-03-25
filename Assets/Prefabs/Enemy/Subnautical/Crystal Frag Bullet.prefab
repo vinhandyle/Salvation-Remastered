@@ -92,6 +92,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8241965120158922357, guid: 0647e7d83fa610d47b0b82e4d8130ce8, type: 3}
     - target: {fileID: 5429372084292591742, guid: c1a126865b691d649b832b435e5ab781, type: 3}
+      propertyPath: fragmentSfx
+      value: 21
+      objectReference: {fileID: 0}
+    - target: {fileID: 5429372084292591742, guid: c1a126865b691d649b832b435e5ab781, type: 3}
       propertyPath: spriteToScaleTo
       value: 
       objectReference: {fileID: -1798770365, guid: 15de6d8145e2c7446bdee75e9690140d, type: 3}

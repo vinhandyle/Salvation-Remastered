@@ -1,3 +1,4 @@
+using AudioManager;
 using Cinemachine;
 using LayerManager;
 using System.Collections;
@@ -8,6 +9,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     protected GameObject player;
+    [SerializeField] protected AudioSource enemyAudio;
+    [SerializeField] protected SoundEffect deathSfx;
 
     [Header("Level")]
     [SerializeField] protected CinemachineVirtualCamera vcam;
@@ -26,6 +29,25 @@ public class Enemy : MonoBehaviour
     {
         player = GameObject.Find("Player");
     }
+
+    #region Audio
+
+    protected void PlaySoundEffect(SoundEffect effect, bool loop = false)
+    {
+        AudioController.Instance.PlayEffect(enemyAudio, effect, loop);
+    }
+
+    protected void PlayDeathSoundEffect()
+    {
+        PlaySoundEffect(deathSfx);
+    }
+
+    protected void ClearSoundEffects()
+    {
+        AudioController.Instance.ClearEffects(enemyAudio);
+    }
+
+    #endregion
 
     #region Shooter
 

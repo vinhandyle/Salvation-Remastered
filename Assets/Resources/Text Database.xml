@@ -43,7 +43,7 @@
     </text>
     <text>
       <key>Expert:true</key>
-      <value>&lt;color=red&gt;Expert Badge&lt;/color&gt;</value>
+      <value>&lt;color=red&gt;Expert Badge (Unavailable)&lt;/color&gt;</value>
     </text>
     <text>
       <key>Dmg:0</key>
@@ -119,29 +119,23 @@
   <challenge>
     <text>
       <key>Boss01</key>
-      <value>REGULAR GUN ONLY
-NO DASH
-NO WALL CLIMB
-NO DOUBLE JUMP</value>
+      <value>TBD</value>
     </text>
     <text>
       <key>Boss02</key>
-      <value>REGULAR GUN ONLY
-NO WALL CLIMB
-NO DOUBLE JUMP</value>
+      <value>TBD</value>
     </text>
     <text>
       <key>Boss03</key>
-      <value>DON'T TOUCH WATER</value>
+      <value>TBD</value>
     </text>
     <text>
       <key>Boss04</key>
-      <value>REGULAR GUN ONLY</value>
+      <value>TBD</value>
     </text>
     <text>
       <key>Boss05</key>
-      <value>NO WALL CLIMB
-NO DOUBLE JUMP</value>
+      <value>TBD</value>
     </text>
     <text>
       <key>Boss06</key>
@@ -153,7 +147,7 @@ NO DOUBLE JUMP</value>
     </text>
     <text>
       <key>Boss08</key>
-      <value>DELIVER THE FINISHING BLOW WITH THE RAIL GUN</value>
+      <value>TBD</value>
     </text>
     <text>
       <key>BossG1</key>

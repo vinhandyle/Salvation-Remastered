@@ -207,7 +207,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &77332553
 Transform:
   m_ObjectHideFlags: 0
@@ -239,6 +239,8 @@ MonoBehaviour:
   projSpeed: 0
   spawnRadius: 7
   spawnRate: 0.33
+  flipSpriteX: 0
+  flipSpriteY: 0
   recycleProjectiles: 0
 --- !u!61 &77332555
 BoxCollider2D:
@@ -1677,7 +1679,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1011511751}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.7, y: 9.28, z: 1}
+  m_LocalPosition: {x: 6.7, y: 9.28, z: 3}
   m_LocalScale: {x: 3.5, y: 3.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3385,6 +3387,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 80582137}
     - target: {fileID: 8062070365427898528, guid: 674f39f617b78ef4db40aac8db96d902, type: 3}
+      propertyPath: debug
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8062070365427898528, guid: 674f39f617b78ef4db40aac8db96d902, type: 3}
       propertyPath: stage
       value: 0
       objectReference: {fileID: 0}
@@ -3402,7 +3408,7 @@ PrefabInstance:
       objectReference: {fileID: 77332554}
     - target: {fileID: 8062070365427898528, guid: 674f39f617b78ef4db40aac8db96d902, type: 3}
       propertyPath: debugStage
-      value: 8
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674f39f617b78ef4db40aac8db96d902, type: 3}

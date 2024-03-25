@@ -15,6 +15,8 @@ public class MenuButton : MonoBehaviour
         if (levelOnly) gameObject.SetActive(SceneController.Instance.InLevel());
     }
 
+    #region Main Menu
+
     /// <summary>
     /// Begin new save file.
     /// </summary>
@@ -34,30 +36,6 @@ public class MenuButton : MonoBehaviour
     }
 
     /// <summary>
-    /// [Un]pause the game.
-    /// </summary>
-    public void TogglePause()
-    {
-        GameStateManager.Instance.TogglePause();
-    }
-
-    /// <summary>
-    /// Reset all enemies and return to the beginning of the level.
-    /// </summary>
-    public void RestartLevel()
-    {
-        SceneController.Instance.LoadScene(SceneController.Instance.currentLevel);
-    }
-
-    /// <summary>
-    /// Return to the hub level.
-    /// </summary>
-    public void ReturnToHub()
-    {
-        SceneController.Instance.LoadScene("Hub");
-    }
-
-    /// <summary>
     /// Return to the main menu.
     /// </summary>
     public void ReturnToMenu()
@@ -72,4 +50,71 @@ public class MenuButton : MonoBehaviour
     {
         Application.Quit();
     }
+
+    #endregion
+
+    #region Level
+
+    /// <summary>
+    /// [Un]pause the game.
+    /// </summary>
+    public void TogglePause()
+    {
+        GameStateManager.Instance.TogglePause();
+    }
+
+    /// <summary>
+    /// Return to the hub level.
+    /// </summary>
+    public void ReturnToHub()
+    {
+        SceneController.Instance.LoadScene("Hub");
+        BossGauntlet.Instance.ExitGauntlet();
+    }
+
+    /// <summary>
+    /// Reset all enemies and return to the beginning of the level.
+    /// </summary>
+    public void RestartLevel()
+    {       
+        if (BossGauntlet.Instance.inGauntlet)
+        {
+            SceneController.Instance.LoadScene(BossGauntlet.Instance.gauntletStart);
+            SceneController.Instance.LoadScene(BossGauntlet.Instance.gauntletRoot, false);
+            BossGauntlet.Instance.ResetGauntlet();
+        }
+        else
+        {
+            SceneController.Instance.LoadScene(SceneController.Instance.currentLevel);
+        }
+    }
+
+    public void ContinueGauntlet(string finalLevel)
+    {
+        string currentLevel = SceneController.Instance.currentLevel;
+        int nextLevel = int.Parse(currentLevel[4].ToString()) * 10 +
+                        int.Parse(currentLevel[5].ToString()) + 1;
+
+        if (currentLevel == finalLevel)
+        {
+            string gauntletRoot = BossGauntlet.Instance.gauntletRoot;
+
+            PlayerData.Instance.UpdateBestTime(gauntletRoot + (PlayerData.Instance.expertMode ? "E" : ""), BossGauntlet.Instance.timer);
+
+            if (BossGauntlet.Instance.noHit)
+                PlayerData.Instance.UpdateAchievement(gauntletRoot, 0);
+
+            ReturnToHub();
+        }
+        else
+        {
+            FindObjectOfType<GauntletMenu>().SetActive(false);
+            SceneController.Instance.LoadScene(
+                string.Format("Boss{0}{1}", nextLevel / 10, nextLevel % 10)
+                );
+            SceneController.Instance.LoadScene(gameObject.scene.name, false);
+        }
+    }
+
+    #endregion
 }

@@ -1,3 +1,4 @@
+using AudioManager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,6 +36,7 @@ public class ContainmentBoss : Enemy
     [SerializeField] private float phase2SpeedMult;
 
     [Header("Blink")]
+    [SerializeField] protected SoundEffect blinkSfx;
     [SerializeField] protected float blinkDist;
     [SerializeField] protected float blinkTime1;
     [SerializeField] protected float blinkTime2;
@@ -42,18 +44,23 @@ public class ContainmentBoss : Enemy
     private float blinkTimer;
 
     [Header("Crash")]
+    [SerializeField] protected SoundEffect crashSfx;
+    [SerializeField] protected SoundEffect crashStartSfx;
+    [SerializeField] protected SoundEffect crashLandSfx;
     [SerializeField] private DamagingObject hurtbox;
     [SerializeField] private float crashSpeed;
     [SerializeField] private float crashWarningTime;
     private bool crashing;
 
     [Header("Explosion")]
+    [SerializeField] protected SoundEffect explosionSfx;
     [SerializeField] private int explosionWaves;
     [SerializeField] private int explosionBullets;
     [SerializeField] private float explosionBulletSpeed;
     [SerializeField] private float explosionWaveDelay;
 
     [Header("Berserk")]
+    [SerializeField] protected SoundEffect berserkStartSfx;
     [SerializeField] private int berserkWaves;
     [SerializeField] private float berserkWarningTime;
     private int berserkCurrentWave;
@@ -72,15 +79,28 @@ public class ContainmentBoss : Enemy
 
             stage = Stage.Start;
             rb.velocity = Vector2.zero;
+
+            ClearSoundEffects();
+            PlayDeathSoundEffect();
         };
 
         hm.OnDeath += () =>
         {
+            GameStateManager.Instance.UpdateState(GameStateManager.GameState.PAUSED);
+
             if (!PlayerData.Instance.fullCam) vcam.Priority -= 2;
 
-            GameStateManager.Instance.UpdateState(GameStateManager.GameState.PAUSED);
-            PlayerData.Instance.UpdateBestTime(SceneController.Instance.currentLevel + (PlayerData.Instance.expertMode ? "E" : ""), timer.timer);
-            SceneController.Instance.LoadScene("Win", false);
+            if (BossGauntlet.Instance.inGauntlet)
+            {
+                FindObjectOfType<GauntletMenu>().SetActive(true);
+                BossGauntlet.Instance.AddToTimer(timer.timer);
+                BossGauntlet.Instance.UpdateNoHit(player.GetComponent<HealthManager>().noHit);
+            }
+            else
+            {
+                PlayerData.Instance.UpdateBestTime(SceneController.Instance.currentLevel + (PlayerData.Instance.expertMode ? "E" : ""), timer.timer);
+                SceneController.Instance.LoadScene("Win", false);
+            }
         };
 
         // Opening move
@@ -221,6 +241,7 @@ public class ContainmentBoss : Enemy
         }
 
         // Don't move to allow player to react
+        PlaySoundEffect(blinkSfx);
         yield return new WaitForSeconds(blinkRestTime);
 
         if (debug)
@@ -243,10 +264,13 @@ public class ContainmentBoss : Enemy
         {
             stage = Stage.Crash;
             SetSpiralColor(1, 0.75f, 0);
+            PlaySoundEffect(crashStartSfx, true);
             yield return new WaitForSeconds(crashWarningTime);
         }
 
         // Perform
+        ClearSoundEffects();
+        PlaySoundEffect(crashSfx);
         SetSpiralColor(0, 0, 0);
         Aim(player.transform.position);
         rb.velocity = crashSpeed * rotator.right;
@@ -284,6 +308,7 @@ public class ContainmentBoss : Enemy
 
         for (int i = 0; i < waves; i++)
         {
+            PlaySoundEffect(explosionSfx);
             for (int j = 0; j < explosionBullets; j++)
             {
                 // Alternate shot angle between waves
@@ -323,9 +348,11 @@ public class ContainmentBoss : Enemy
 
         // Telegraph
         SetSpiralColor(1, 0, 0);
+        PlaySoundEffect(berserkStartSfx, true);
         yield return new WaitForSeconds(berserkWarningTime);
 
         // Perform
+        ClearSoundEffects();
         SetSpiralColor(0, 0, 0);
         StartCoroutine(Crash());
         yield break;
@@ -353,6 +380,7 @@ public class ContainmentBoss : Enemy
                     offset = coreRadius + contact.magnitude;
                
                 transform.position = offset * normal + (Vector2)transform.position;
+                PlaySoundEffect(crashLandSfx);
             }
         }
     }
