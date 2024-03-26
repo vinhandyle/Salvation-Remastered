@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// The buttons in the menu.
@@ -9,10 +8,12 @@ using UnityEngine.SceneManagement;
 public class MenuButton : MonoBehaviour
 {
     [SerializeField] private bool levelOnly;
+    [SerializeField] private bool notNewGame;
 
     protected virtual void Awake()
     {
         if (levelOnly) gameObject.SetActive(SceneController.Instance.InLevel());
+        if (notNewGame) gameObject.SetActive(!PlayerData.Instance.newSave);
     }
 
     #region Main Menu
@@ -22,7 +23,7 @@ public class MenuButton : MonoBehaviour
     /// </summary>
     public void NewGame()
     {
-        // Prep new save file
+        PlayerData.Instance.ResetData();
         SceneController.Instance.LoadScene("Hub");
     }
 
@@ -30,9 +31,8 @@ public class MenuButton : MonoBehaviour
     /// Continue from the previous save file progress.
     /// </summary>
     public void ContinueGame()
-    {
-        // Open submenu with 3 save slots
-        SaveManager.Instance.LoadGame();
+    {        
+        SceneController.Instance.LoadScene("Hub");
     }
 
     /// <summary>
@@ -40,6 +40,7 @@ public class MenuButton : MonoBehaviour
     /// </summary>
     public void ReturnToMenu()
     {
+        PlayerData.Instance.newSave = false;
         SceneController.Instance.LoadScene("Menu");
     }
 

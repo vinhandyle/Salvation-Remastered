@@ -9,12 +9,33 @@ EditorBuildSettings:
     path: Assets/Scenes/Boot.unity
     guid: a985ae0b644dff14cae93f0e35af081b
   - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: 3fc3aeda4a026b5438b78b109aba0161
+  - enabled: 1
+    path: Assets/Scenes/Pause.unity
+    guid: a970a7009f097f64989863cb58086557
+  - enabled: 1
     path: Assets/Scenes/Hub.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Win.unity
+    guid: 9cd9df56d31aa6d4d982e37677fac9ec
   - enabled: 1
     path: Assets/Scenes/Game Over.unity
     guid: 9b5a4a1b65dbd4b4c802c787ec1d54ec
   - enabled: 1
-    path: Assets/Scenes/Pause.unity
-    guid: a970a7009f097f64989863cb58086557
+    path: Assets/Scenes/Combat/Boss01.unity
+    guid: 2ffef75a9fbb94b4492eee624cbb4104
+  - enabled: 1
+    path: Assets/Scenes/Combat/Boss02.unity
+    guid: fc772d5d710c8774c875292aaf9450ca
+  - enabled: 1
+    path: Assets/Scenes/Combat/Boss03.unity
+    guid: 6e0f1b5a458690e4e9ef494d50ed40ff
+  - enabled: 1
+    path: Assets/Scenes/Combat/Boss04.unity
+    guid: 9a3ca02dcc4299246b2c2c3e673b68fb
+  - enabled: 1
+    path: Assets/Scenes/Combat/BossG1.unity
+    guid: 5e80aa8ab64af2c42b81a0c8145135a7
   m_configObjects: {}

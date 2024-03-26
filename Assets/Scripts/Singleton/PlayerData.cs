@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class PlayerData : Singleton<PlayerData>
 {
-    public float masterVolume;
-    public float musicVolume;
-    public float sfxVolume;
+    public bool newSave;
     public bool fullCam;
 
     public Dictionary<string, float> bestTimes;
@@ -32,6 +30,12 @@ public class PlayerData : Singleton<PlayerData>
     protected override void Awake()
     {
         base.Awake();
+        ResetData();
+    }    
+
+    public void ResetData()
+    {
+        newSave = true;
         fullCam = true;
 
         bestTimes = new Dictionary<string, float>();
@@ -40,19 +44,12 @@ public class PlayerData : Singleton<PlayerData>
         challenges = new HashSet<string>();
         expertChallenges = new HashSet<string>();
 
+        dmgMult = 1;
         equipped = new bool[6];
         unlocked = new bool[6];
-        equipped[0] = true;        
+        equipped[0] = true;
         unlocked[0] = true;
-        dmgMult = 1;
-
-        for (int i = 1; i < equipped.Length; i++)
-            equipped[i] = true;
-    }
-
-    public void LoadData(object data)
-    { 
-    
+        expertMode = false;
     }
 
     public void UpdateBestTime(string key, float time)
@@ -99,5 +96,3 @@ public class PlayerData : Singleton<PlayerData>
         }
     }
 }
-
-

@@ -132,6 +132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2094731449}
+  - component: {fileID: 2094731457}
   - component: {fileID: 2094731451}
   - component: {fileID: 2094731450}
   - component: {fileID: 2094731448}
@@ -244,9 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd6173a6fb79d394989e564ad7cbc549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  masterVolume: 0
-  musicVolume: 0
-  sfxVolume: 0
+  newSave: 0
   fullCam: 0
   godMode: 000000
   dmgMult: 0
@@ -375,5 +374,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9e62737318164b44b6ac038a7c78f92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2094731457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094731447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd9f7e9e7cf0d944f9fa0d36ab4493c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -11,65 +11,53 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class SaveManager : Singleton<SaveManager>
 {    
-    public PlayerController player;
-
-    [SerializeField] private string firstLevelToLoad;
-    [SerializeField] private int checkpointStart;
-
+    private PlayerDataStruct playerData;
 
     private void Start()
     {
+        playerData = new PlayerDataStruct();
         LoadGameFromDisk();
         SceneController.Instance.LoadMainMenu();
     }
 
-    #region Save
-
     /// <summary>
     /// Save the progress of the current play session.
     /// </summary>
-    public void SavePlayerInfo(string level = "")
+    public void SavePlayerData()
     {
-        
-    }
+        playerData.fullCam = PlayerData.Instance.fullCam;
 
-    #endregion
+        playerData.bestTimes = PlayerData.Instance.bestTimes;
+        playerData.noHits = PlayerData.Instance.noHits;
+        playerData.expertNoHits = PlayerData.Instance.expertNoHits;
+        playerData.challenges = PlayerData.Instance.challenges;
+        playerData.expertChallenges = PlayerData.Instance.expertChallenges;
 
-    #region Load
-
-    /// <summary>
-    /// Load the progress of the most recent play session.
-    /// </summary>
-    private IEnumerator LoadPlayerInfo(string level, int checkpointID = -1)
-    {       
-        SceneController.Instance.LoadScene(level);
-
-        // Wait for player object in next scene to link with this
-        while (SceneManager.GetActiveScene().name != level || player == null)
-        {
-            yield return null;
-        }
-    }
-
-    /// <summary>
-    /// Load the specified level with the player at the specified position.
-    /// </summary>
-    public void LoadLevel(string level, Vector2 pos)
-    {
-        StartCoroutine(LoadPlayerInfo(level));
+        playerData.dmgMult = PlayerData.Instance.dmgMult;
+        playerData.equipped = PlayerData.Instance.equipped;
+        playerData.unlocked = PlayerData.Instance.unlocked;
+        playerData.expertMode = PlayerData.Instance.expertMode;
     }
 
     /// <summary>
     /// Load the progress of the most recent play session.
     /// </summary>
-    public void LoadGame()
+    public void LoadPlayerData()
     {
-        //LoadLevel(playerData.level, new Vector2(playerData.posX, playerData.posY));
+        PlayerData.Instance.newSave = false;
+        PlayerData.Instance.fullCam = playerData.fullCam;
+
+        PlayerData.Instance.bestTimes = playerData.bestTimes;
+        PlayerData.Instance.noHits = playerData.noHits;
+        PlayerData.Instance.expertNoHits = playerData.expertNoHits;
+        PlayerData.Instance.challenges = playerData.challenges;
+        PlayerData.Instance.expertChallenges = playerData.expertChallenges;
+
+        PlayerData.Instance.dmgMult = playerData.dmgMult;
+        PlayerData.Instance.equipped = playerData.equipped;
+        PlayerData.Instance.unlocked = playerData.unlocked;
+        PlayerData.Instance.expertMode = playerData.expertMode;
     }
-
-    #endregion
-
-    #region Disk
 
     /// <summary>
     /// Save game progress stored in the application onto the local disk.
@@ -77,21 +65,16 @@ public class SaveManager : Singleton<SaveManager>
     /// </summary>
     private void SaveGameToDisk()
     {
-        // Do this in case the player force closes the application
-        if (GameStateManager.Instance.currentState == GameStateManager.GameState.PAUSED)
-            GameStateManager.Instance.TogglePause();
+        SavePlayerData();
 
-        if (GameStateManager.Instance.currentState == GameStateManager.GameState.RUNNING)
-            SavePlayerInfo(SceneController.Instance.currentScene);
-        
         // Save audio settings last
-        PlayerData.Instance.masterVolume = AudioController.Instance.GetVolume("Master");
-        PlayerData.Instance.musicVolume = AudioController.Instance.GetVolume("Music");
-        PlayerData.Instance.sfxVolume = AudioController.Instance.GetVolume("SFX");
+        playerData.masterVolume = AudioController.Instance.GetVolume("Master");
+        playerData.musicVolume = AudioController.Instance.GetVolume("Music");
+        playerData.sfxVolume = AudioController.Instance.GetVolume("SFX");
 
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/playerInfo.dat");
-        bf.Serialize(file, PlayerData.Instance);
+        bf.Serialize(file, playerData);
         file.Close();
     }
 
@@ -109,7 +92,12 @@ public class SaveManager : Singleton<SaveManager>
 
             try
             {
-                PlayerData.Instance.LoadData(bf.Deserialize(file));
+                playerData = (PlayerDataStruct)bf.Deserialize(file);
+                LoadPlayerData();
+
+                AudioController.Instance.ChangeVolume("Master", playerData.masterVolume);
+                AudioController.Instance.ChangeVolume("Music", playerData.musicVolume);
+                AudioController.Instance.ChangeVolume("SFX", playerData.sfxVolume);
             }
             catch (Exception ex)
             {               
@@ -117,16 +105,30 @@ public class SaveManager : Singleton<SaveManager>
             }
             file.Close();            
         }
-
-        AudioController.Instance.ChangeVolume("Master", PlayerData.Instance.masterVolume);
-        AudioController.Instance.ChangeVolume("Music", PlayerData.Instance.musicVolume);
-        AudioController.Instance.ChangeVolume("SFX", PlayerData.Instance.sfxVolume);
     }
-
-    #endregion
 
     private void OnApplicationQuit()
     {
         SaveGameToDisk();
     }
+}
+
+[Serializable]
+public struct PlayerDataStruct
+{
+    public float masterVolume;
+    public float musicVolume;
+    public float sfxVolume;
+    public bool fullCam;
+
+    public Dictionary<string, float> bestTimes;
+    public HashSet<string> noHits;
+    public HashSet<string> expertNoHits;
+    public HashSet<string> challenges;
+    public HashSet<string> expertChallenges;
+
+    public int dmgMult;
+    public bool[] equipped;
+    public bool[] unlocked;
+    public bool expertMode;
 }

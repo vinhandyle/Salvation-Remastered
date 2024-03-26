@@ -177,6 +177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelOnly: 0
+  notNewGame: 0
 --- !u!114 &66916569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -686,6 +687,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelOnly: 0
+  notNewGame: 1
 --- !u!114 &871101762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1104,6 +1106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelOnly: 0
+  notNewGame: 0
 --- !u!114 &1400959389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1425,6 +1428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelOnly: 0
+  notNewGame: 0
 --- !u!114 &1603281509
 MonoBehaviour:
   m_ObjectHideFlags: 0
